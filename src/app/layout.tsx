@@ -18,15 +18,14 @@ export default function RootLayout({ children }: IProps) {
   return (
     <html lang="en">
       <Providers>
-   
         <ClientOnly>
-          <PostModal/>
+          <PostModal />
           <LoginModal />
           <ResgisterModal />
           <Navbar />
         </ClientOnly>
-      
-      <body>{children}</body>
+
+        <body>{children}</body>
       </Providers>
     </html>
   );

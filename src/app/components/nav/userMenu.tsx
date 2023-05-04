@@ -21,7 +21,7 @@ function UserMenu() {
 
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
-    const postModal = usePostModal();
+  const postModal = usePostModal();
 
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
@@ -83,6 +83,7 @@ function UserMenu() {
       {isOpen && (
         <div
           className="
+          z-50
             absolute 
             rounded-xl 
             shadow-md
@@ -99,20 +100,12 @@ function UserMenu() {
             {session?.user ? (
               <>
                 <MenuItem
-                  label="My trips"
+                  label="My profile"
                   onClick={() => router.push("/trips")}
                 />
                 <MenuItem
-                  label="My favorites"
+                  label="Settings"
                   onClick={() => router.push("/favorites")}
-                />
-                <MenuItem
-                  label="My reservations"
-                  onClick={() => router.push("/reservations")}
-                />
-                <MenuItem
-                  label="My properties"
-                  onClick={() => router.push("/properties")}
                 />
 
                 <hr />

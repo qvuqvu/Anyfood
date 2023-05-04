@@ -47,6 +47,7 @@ const PostModal = () => {
       images: "",
       title: "",
       content: "",
+      tags: "",
     },
   });
 
@@ -217,6 +218,15 @@ const PostModal = () => {
         <Input
           id="content"
           label="Description"
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
+        />
+         <hr />
+        <Input
+          id="tags"
+          label="Tags"
           disabled={isLoading}
           register={register}
           errors={errors}

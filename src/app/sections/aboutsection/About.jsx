@@ -18,7 +18,7 @@ const About = () => (
 
       <motion.p
         variants={fadeIn("up", "tween", 0.2, 1)}
-        className="mt-[8px] font-pops text-white font-light tablet:text-[32px] text-[15px] text-center text-secondary-white px-5"
+        className="mt-[8px] font-pops text-black font-light tablet:text-[20px] text-[15px] text-center text-secondary-white px-[50px]"
       >
         <span className="font-extrabold text-secondary">Anyfood</span> Our
         review food website combines the power of blockchain technology with a

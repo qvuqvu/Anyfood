@@ -3,13 +3,13 @@ import styles from "../styles/index";
 const StartSteps = ({ number, text }) => (
   <div className={`${styles.flexCenter} flex-row`}>
     <div
-      className={`${styles.flexCenter} w-[70px] h-[70px] rounded-[24px] bg-[#323F5D]`}
+      className={`${styles.flexCenter} w-[70px] h-[70px] rounded-[24px] bg-secondary`}
     >
-      <p className="font-bold text-[20px] text-white">
+      <p className="font-bold text-[20px] text-primary">
         {number}
       </p>
     </div>
-    <p className="flex-1 ml-[30px] font-normal text-[18px] text-[#B0B0B0] leading-[32.4px]">
+    <p className="flex-1 ml-[30px] font-normal text-[18px] font-pops text-black leading-[32.4px]">
       {text}
     </p>
   </div>

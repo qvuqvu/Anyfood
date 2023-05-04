@@ -8,8 +8,8 @@ import StartSteps from "@/app/components/StartSteps";
 import { TypingText, TitleText } from "@/app/components/CustomTexts";
 import { fadeIn, staggerContainer, planetVariants } from "../../utils/motion";
 export const startingFeatures = [
-  "Find a world that suits you and you want to enter",
-  "Enter the world by reading basmalah to be safe",
+  "Find a dish that suits you",
+  "Post a review of your recent meal",
   "No need to beat around the bush, just stay on the gas and have fun",
 ];
 const GetStarted = () => (
@@ -25,7 +25,7 @@ const GetStarted = () => (
         variants={fadeIn("left", "tween", 0.2, 1)}
         className="flex-[0.75] flex justify-center flex-col"
       >
-        <TypingText title="| How Metaversus Works" />
+        <TypingText title="| How We work" />
         <TitleText title={<>Get started with just a few clicks</>} />
         <div className="mt-[31px] flex flex-col max-w-[370px] gap-[24px]">
           {startingFeatures.map((feature, index) => (

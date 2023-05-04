@@ -13,7 +13,7 @@ function Navbar() {
   const router = useRouter();
 
   return (
-    <div className="fixed w-full bg-white z-10 shadow-sm">
+    <div className="z-50 w-full bg-white shadow-sm">
       <div
         className="
           py-4 
@@ -24,7 +24,6 @@ function Navbar() {
           <div className="font-pops h5 text-primary font-normal">Anyfood</div>
           <div className="hidden tablet:block">
             <ul className=" flex gap-2">
-             
               <li>
                 <LinkButton path="/about">About us</LinkButton>
               </li>

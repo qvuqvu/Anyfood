@@ -38,25 +38,25 @@ function Herosection() {
   };
   return (
     <section className="mb-80">
-      <div className="flex flex-col items-center h-auto  bg-primary">
+      <div className="flex flex-col items-center h-auto ">
         {/* NAME AND PROMT */}
         <div className="flex flex-col mt-8 items-center">
-          <div className="font-pops text-h1 laptop:text-[82px] font-bold text-lime-300 ">
+          <div className="font-pops text-h1 laptop:text-[82px] font-bold text-primary ">
             {" "}
             Any. Food
           </div>
-          <div className="text-white font-pops text-[12px] font-light w-56 text-center">
+          <div className="text-primary font-pops text-[12px] font-light w-56 text-center">
             Don’t know what to eat then generate your <b>food</b> now
           </div>
         </div>
         {/* Hand */}
 
-        <button
+        {/* <button
           type="button"
           class="absolute top-[39%] z-50 h-20 w-20 rounded-full text-white font-pops bg-gradient-to-br bg-secondary border-4 border-pumpkin hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-blue-800 font-medium  text-sm px-5 py-5 text-center "
         >
           now
-        </button>
+        </button> */}
         <motion.div
           initial="hidden"
           animate="visible"
@@ -149,7 +149,7 @@ function Herosection() {
             initial="hidden"
             animate="visible"
             variants={variants1}
-            className="z-20 absolute top-[56%] left-[10%]  pr-0 "
+            className="z-20 absolute top-[56%] left-[3%]  pr-0 "
           >
             <img
               src="https://i.imgur.com/0fHvwX4.png"
@@ -159,30 +159,13 @@ function Herosection() {
           </motion.div>
         </div>
 
-        {/* orange layer */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={variants}
-          className="absolute z-20 mobile:top-[36%]  laptop:right-0 left-1/2 pr-0 "
-        >
-          <svg
-            className="w-full"
-            width="593"
-            height="710"
-            viewBox="0 0 593 710"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M0 307.964L327.817 0H593V710L0 307.964Z" fill="#FF6D3B" />
-          </svg>
-        </motion.div>
+
         {/* yellow layer */}
-        <motion.div
+        {/* <motion.div
           initial="hidden"
           animate="visible"
           variants={variants}
-          className="absolute  z-20 laptop:right-0 top-[35%] left-[52%] pr-0 "
+          className="absolute  z-20  top-[35%] pr-0 "
         >
           <svg
             className="w-11/12"
@@ -198,23 +181,23 @@ function Herosection() {
               stroke="#FDCD00"
             />
           </svg>
-        </motion.div>
+        </motion.div> */}
         {/* pathway  */}
-        <motion.div
+        {/* <motion.div
           initial="hidden"
           animate="visible"
           variants={variants}
-          className="z-20 absolute laptop:right-0  top-[57%] left-[53%]  pr-0 "
+          className="z-20 absolute laptop:right-0   pr-0 "
         >
           <img
             src="https://i.imgur.com/v4lNaXO.png"
             alt="Moving Image"
             className=" w-full laptop:w-1/2 animate-lightbounce object-contain"
           />
-        </motion.div>
+        </motion.div> */}
 
         {/* Search */}
-        <div className="w-[250px] laptop:w-auto mt-24 z-50 ml-5">
+        {/* <div className="w-[250px] laptop:w-auto mt-24 z-50 ml-5">
           <form class="flex items-center justify-center laptop:mt-36">
             <label for="simple-search" class="sr-only">
               Search
@@ -264,7 +247,7 @@ function Herosection() {
               <span class="sr-only">Search food, restaurants</span>
             </button>
           </form>
-        </div>
+        </div> */}
 
         {/* <motion.div
         initial="hidden"

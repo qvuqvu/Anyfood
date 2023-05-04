@@ -13,7 +13,7 @@ export default async function postListing(
   }
   if (req.method === "POST") {
     // extract the data from the request body
-    const { title, content, images, address } = req.body;
+    const { title, content, images, address, tags } = req.body;
 
     const response = await fetch("http://localhost:2002/api/v1/posts", {
       method: "POST",
@@ -25,6 +25,7 @@ export default async function postListing(
         content,
         images,
         address,
+        tags,
       }),
     });
 

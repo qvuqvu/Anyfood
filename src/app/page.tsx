@@ -11,22 +11,22 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
-    <div className="w-full overflow-hidden flex flex-col bg-primary">
+    <div className=" overflow-hidden flex flex-col items-center">
       {/* <Head>
         <title>Anyfood | A blockchain-based review food</title>
       </Head> */}
       {/* <div className="z-0">
         <Navbar />
       </div> */}
-      {/* <div className="p-50">
+      <div className="">
         <Herosection />
-      </div> */}
-      {/* <div className="py-12 mt-10">
+      </div>
+      <div className="py-12 mt-[100px]">
         <About />
       </div>
       <div>
         <Getstarted />
-      </div> */}
+      </div>
     </div>
   );
 }
