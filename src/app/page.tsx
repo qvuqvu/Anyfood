@@ -24,7 +24,7 @@ export default function Home() {
       <div className="py-12 mt-[100px]">
         <About />
       </div>
-      <div>
+      <div >
         <Getstarted />
       </div>
     </div>
