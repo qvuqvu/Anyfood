@@ -15,18 +15,18 @@ export default function Home() {
       {/* <Head>
         <title>Anyfood | A blockchain-based review food</title>
       </Head> */}
-      <div className="z-0">
+      {/* <div className="z-0">
         <Navbar />
-      </div>
-      <div className="p-50">
+      </div> */}
+      {/* <div className="p-50">
         <Herosection />
-      </div>
-      <div className="py-12 mt-10">
+      </div> */}
+      {/* <div className="py-12 mt-10">
         <About />
       </div>
       <div>
         <Getstarted />
-      </div>
+      </div> */}
     </div>
   );
 }

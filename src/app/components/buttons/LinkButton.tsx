@@ -1,13 +1,6 @@
+"use client";
 import Link from "next/link";
-import { ButtonProps } from "./types";
-/*
-Name: LinkButton
-Description: used to link to a page. This LinkButton has the effect that draws an underline
-Properties:
-  children
-  path: string (default: '/')
-  size: 'small' | 'large' (default: 'small')
-*/
+import { LinkButtonProps } from "./types";
 
 const sizes = {
   small: "px-2",
@@ -15,8 +8,10 @@ const sizes = {
 };
 
 const colors = {
-  light: "text-light_grey after:bg-light_grey",
+  light: "text-primary after:bg-light_grey",
   dark: "text-dark_primary after:bg-dark_primary",
+  secondary: "bg-light_grey text-dark_primary hover:bg-border_grey",
+  primary: "bg-primary text-white font-pops hover:bg-dark_primary",
 };
 
 function LinkButton({
@@ -25,11 +20,11 @@ function LinkButton({
   size = "small",
   color = "light",
   onClick,
-}: ButtonProps) {
+}: LinkButtonProps) {
   return (
     <Link href={path}>
       <div
-        className={`min-w-fit h-full flex-1 font-pops ${sizes[size]} flex items-center relative after:block after:h-[2px] after:w-full ${colors[color]} after:absolute after:bottom-0 after:left-0 after:scale-x-0 after:scale-y-100 after:origin-top-right after:transition-transform after:duration-300 after:ease-linear hover:after:scale-x-100 hover:scale-y-100 hover:after:origin-bottom-left`}
+        className={`min-w-fit h-full flex-1 font-pops font-light ${sizes[size]} flex items-center relative after:block after:h-[2px] after:w-full ${colors[color]} after:absolute after:bottom-0 after:left-0 after:scale-x-0 after:scale-y-100 after:origin-top-right after:transition-transform after:duration-300 after:ease-linear hover:after:scale-x-100 hover:scale-y-100 hover:after:origin-bottom-left`}
         onClick={onClick}
       >
         {children}

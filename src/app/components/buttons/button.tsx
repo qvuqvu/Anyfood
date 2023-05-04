@@ -10,66 +10,66 @@ Properties:
   Custom: false | true (default: false)
   Padding: string (active when Custom={true})
 */
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
-import { motion } from 'framer-motion'
-
-import { colors, sizes } from '../../constant/button'
+"use client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
+import { colors, sizes } from "../constants/button";
+import { NormalButtonProps } from "./types";
 
 const itemVariants = {
   open: {
     opacity: 1,
     y: 0,
-    transition: { type: 'spring', stiffness: 300, damping: 24 }
+    transition: { type: "spring", stiffness: 300, damping: 24 },
   },
-  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } }
-}
+  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+};
 
 function Button({
-  Color = 'white',
-  Size = 'medium',
-  State = 'default',
-  IconRight = false,
-  Custom = false,
-  children = 'button',
-  Padding = '',
-  IsOpen = null,
-  HandleOpen = () => {},
-  HandleItemClick = () => {},
+  color = "white",
+  size = "medium",
+  state = "default",
+  iconRight = false,
+  custom = false,
+  children,
+  padding = "",
+  isOpen = null,
+  handleOpen = () => {},
+  handleItemClick = (index) => {},
   onClick = () => {},
-  DropItem = [],
-  Form = null
-}) {
+  dropItem = [],
+  form = null,
+}: NormalButtonProps) {
   //const [isOpen, setIsOpen] = useState(false)
   /*const handleOpen = () => {
     setIsOpen(!isOpen)
     onClick()
   }*/
 
-  const handleItemClick = (index) => {
-    HandleOpen()
-    HandleItemClick(index)
-  }
+  // const handleItemClick = (index) => {
+  //   handleOpen()
+  //   handleItemClick(index)
+  // }
   return (
     <motion.nav
       initial={false}
-      animate={IsOpen ? 'open' : 'closed'}
+      animate={isOpen ? "open" : "closed"}
       className=" min-w-fit min-h-fit flex-1 flex relative"
     >
       <motion.button
-        className={`text-body-md min-w-fit min-h-fit flex-1 flex items-center justify-center gap-4 relative ease-out duration-300 ${
-          State === 'default' ? 'cursor-pointer' : 'cursor-default'
-        } rounded-lg ${colors[Color][State]} ${Custom ? Padding : sizes[Size]}`}
-        whileHover={State === 'default' ? { scale: 1.05 } : { scale: 1 }}
-        whileTap={State === 'dafault' ? { scale: 0.9 } : { scale: 1 }}
-        onClick={IconRight ? HandleOpen : onClick}
-        form={Form}
+        className={`text-body-md min-w-fit min-h-fit flex-1 flex items-center font-pops justify-center gap-4 relative ease-out duration-300 ${
+          state === "default" ? "cursor-pointer" : "cursor-default"
+        } rounded-lg ${colors[color]} ${custom ? padding : sizes[size]}`}
+        whileHover={state === "default" ? { scale: 1.05 } : { scale: 1 }}
+        whileTap={state === "default" ? { scale: 0.9 } : { scale: 1 }}
+        onClick={iconRight ? handleOpen : onClick}
+        form={form}
         type="submit"
       >
         {children}
         {/* this is icon right */}
-        {IconRight && (
+        {iconRight && (
           <motion.div
             variants={{ open: { rotate: 180 }, closed: { rotate: 0 } }}
           >
@@ -78,32 +78,32 @@ function Button({
         )}
       </motion.button>
       {/* this is dropdown button */}
-      {IconRight && (
+      {iconRight && (
         <motion.ul
           variants={{
             open: {
-              clipPath: 'inset(0% 0% 0% 0%)',
+              clipPath: "inset(0% 0% 0% 0%)",
               transition: {
-                type: 'spring',
+                type: "spring",
                 bounce: 0,
                 duration: 0.7,
                 delayChildren: 0.3,
-                staggerChildren: 0.05
-              }
+                staggerChildren: 0.05,
+              },
             },
             closed: {
-              clipPath: 'inset(10% 50% 90% 50%)',
+              clipPath: "inset(10% 50% 90% 50%)",
               transition: {
-                type: 'spring',
+                type: "spring",
                 bounce: 0,
-                duration: 0.3
-              }
-            }
+                duration: 0.3,
+              },
+            },
           }}
-          style={{ pointerEvents: IsOpen ? 'auto' : 'none' }}
-          className={`w-full max-h-80 rounded-lg flex flex-col gap-10 list-none m-0 mt-5 py-2 absolute -bottom-2 translate-y-full ${colors[Color][State]}`}
+          style={{ pointerEvents: isOpen ? "auto" : "none" }}
+          className={`w-full max-h-80 rounded-lg flex flex-col gap-10 list-none m-0 mt-5 py-2 absolute -bottom-2 translate-y-full ${colors[color]}`}
         >
-          {DropItem.map((item, index) => (
+          {dropItem.map((item, index) => (
             <motion.li
               variants={itemVariants}
               key={index}
@@ -116,7 +116,7 @@ function Button({
         </motion.ul>
       )}
     </motion.nav>
-  )
+  );
 }
 
-export default Button
+export default Button;
