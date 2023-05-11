@@ -46,7 +46,7 @@ const LoginModal = () => {
       ...data, 
       redirect: false,
     })
-    .then((callback) => {
+    .then((callback) => { 
       setIsLoading(false);
 
       if (callback?.ok) {
