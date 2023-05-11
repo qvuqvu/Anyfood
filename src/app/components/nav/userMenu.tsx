@@ -25,6 +25,7 @@ function UserMenu() {
 
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
+  console.log({session});
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
