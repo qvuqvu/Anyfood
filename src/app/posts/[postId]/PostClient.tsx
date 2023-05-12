@@ -66,6 +66,7 @@ const PostClient: React.FC<ListingClientProps> = ({
             <div className="max-w-screen-lg mb-8 mx-auto shadow-lg p-5 border-gray-200 border-[1px] rounded-2xl">
               <div className="flex flex-col gap-6">
                 <ListingHead
+                  rate={listing.data.post.rate}
                   title={listing.data.post.title}
                   imageSrc={listing.data.post.images[0]}
                   locationValue={listing.data.location[0].name}

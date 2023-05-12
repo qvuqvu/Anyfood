@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-
+import { AiFillStar } from "react-icons/ai";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 import Avatar from "../nav/Avatar";
@@ -14,6 +14,7 @@ interface ListingHeadProps {
   id: string;
   currentUser?: SafeUser | null;
   userName: string;
+  rate: string;
 }
 
 const ListingHead: React.FC<ListingHeadProps> = ({
@@ -24,17 +25,23 @@ const ListingHead: React.FC<ListingHeadProps> = ({
   id,
   timePosted,
   currentUser,
+  rate,
 }) => {
   return (
     <>
-      <div className="text-start">
+      <div className="text-start flex-col flex gap-2">
         <div className="text-2xl h1 text-[28px] font-bold">{title}</div>
-        <div className="flex gap-3 font-sans">
-          Reviewed by <Avatar /> {userName}
+        <div className="flex gap-3 font-sans font-semibold">
+          <Avatar /> {userName}
         </div>
 
         <div className="font-light text-neutral-500 mt-2">
           Đăng {timePosted} tại {locationValue}
+        </div>
+
+        <div className="flex items-center gap-1">
+          <AiFillStar size={20} className="fill-rose-500" />
+          <div className="font-bold">{rate}</div>/5 điểm
         </div>
       </div>
       <div

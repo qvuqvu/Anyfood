@@ -15,6 +15,7 @@ import { useCallback, useMemo } from "react";
 import HeartButton from "../HeartButton";
 import Button from "../buttons/Button1";
 import ClientOnly from "../ClientOnly";
+import Avatar from "../nav/Avatar";
 interface ListingCardProps {
   data: SafeListing;
   onAction?: (id: string) => void;
@@ -55,7 +56,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
       onClick={() => router.push(`/posts/${data.post.id}`)}
       className="col-span-1 cursor-pointer group"
     >
-      <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-col gap-2 w-full shadow-lg rounded-xl">
         <div
           className="
             aspect-square 
@@ -88,9 +89,14 @@ const ListingCard: React.FC<ListingCardProps> = ({
           </div>
         </div>
 
-        <div className="font-semibold text-lg">{data.post.title}</div>
-        <div className="font-light text-neutral-500">
-          {data.user.firstName} {data.user.lastName}
+        <div className="font-semibold text-lg px-2 line-clamp-2">
+          {data.post.title}
+        </div>
+        <div className="flex p-3 gap-2">
+          <Avatar/>
+          <div className="font-light text-neutral-500 ">
+            {data.user.firstName} {data.user.lastName}
+          </div>
         </div>
 
         {onAction && actionLabel && (
