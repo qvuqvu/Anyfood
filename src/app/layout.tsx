@@ -6,6 +6,7 @@ import LoginModal from "./components/modals/loginModal";
 import { ReactNode } from "react";
 import Providers from "./actions/Providers";
 import PostModal from "./components/modals/postModal";
+import Footer from "./components/footer";
 interface IProps {
   children: ReactNode;
 }
@@ -26,6 +27,9 @@ export default function RootLayout({ children }: IProps) {
         </ClientOnly>
 
         <body>{children}</body>
+        <ClientOnly>
+          <Footer />
+        </ClientOnly>
       </Providers>
     </html>
   );

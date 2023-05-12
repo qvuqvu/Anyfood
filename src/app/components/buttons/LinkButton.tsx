@@ -9,7 +9,7 @@ const sizes = {
 
 const colors = {
   light: "text-primary after:bg-light_grey",
-  dark: "text-dark_primary after:bg-dark_primary",
+  dark: "text-secondary after:bg-light_grey",
   secondary: "bg-light_grey text-dark_primary hover:bg-border_grey",
   primary: "bg-primary text-white font-pops hover:bg-dark_primary",
 };
@@ -18,7 +18,7 @@ function LinkButton({
   children,
   path = "/",
   size = "small",
-  color = "light",
+  color = "dark",
   onClick,
 }: LinkButtonProps) {
   return (
