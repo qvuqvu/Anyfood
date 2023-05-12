@@ -17,7 +17,6 @@ import Button from "../buttons/Button1";
 import ClientOnly from "../ClientOnly";
 interface ListingCardProps {
   data: SafeListing;
-  reservation?: SafeReservation;
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
@@ -27,7 +26,6 @@ interface ListingCardProps {
 
 const ListingCard: React.FC<ListingCardProps> = ({
   data,
-  reservation,
   onAction,
   disabled,
   actionLabel,
@@ -94,11 +92,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
         <div className="font-light text-neutral-500">
           {data.user.firstName} {data.user.lastName}
         </div>
-        {/* <div className="flex flex-row items-center gap-1">
-          <div className="font-semibold">
-           {data.post.title}
-          </div>
-        </div> */}
+
         {onAction && actionLabel && (
           <Button
             disabled={disabled}
