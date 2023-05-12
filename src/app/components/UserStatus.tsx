@@ -19,7 +19,7 @@ const UserStatus: React.FC<UserStatusProps> = ({
   totalFollowing,
 }) => {
   return (
-    <div className="flex flex-col gap-3 shadow-lg px-6 py-8 rounded-xl">
+    <div className="flex flex-col gap-3 shadow-xl px-6 py-8 rounded-xl">
       <div className="flex gap-4">
         <Avatar />
         <div className="text-bold font-pops text-primary h1">
