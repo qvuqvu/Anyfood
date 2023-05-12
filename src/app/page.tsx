@@ -17,6 +17,7 @@ import ListingCard from "./components/posts/ListingCard";
 import axios from "axios";
 import UserStatus from "./components/UserStatus";
 import { useSession } from "next-auth/react";
+import EmptyUserStatus from "./components/EmptyUserStatus";
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const { data: session } = useSession();
@@ -43,7 +44,7 @@ export default function Home() {
   return (
     <ClientOnly>
       <Container>
-        <div className="flex px-20">
+        <div className="flex px-20 pb-5">
           <div className="flex-auto">
             <div className="rounded-lg">
               <img
@@ -54,7 +55,6 @@ export default function Home() {
             </div>
             <div
               className=" 
-          
             pt-24
             grid 
             grid-cols-1 
@@ -75,9 +75,9 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="">
+          <div className="px-10">
             {!session ? (
-              <div>Hi </div>
+              <EmptyUserStatus />
             ) : (
               <UserStatus
                 firstName={session.user.data.user.firstName}
