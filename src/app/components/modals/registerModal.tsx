@@ -27,15 +27,14 @@ const ResgisterModal = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      phoneNumber: "",
-      birthDay: "",
     },
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log("hi")
     setIsLoading(true);
     axios
-      .post("/api/register", data)
+      .post("http://localhost:2002/api/v1/user/register/email", data)
       .then(() => {
         toast.success("Registered!");
         registerModal.onClose();
@@ -98,7 +97,7 @@ const ResgisterModal = () => {
         errors={errors}
         required
       />
-      <Input
+      {/* <Input
         id="phoneNumber"
         label="Phone number"
         type="number"
@@ -115,7 +114,7 @@ const ResgisterModal = () => {
         register={register}
         errors={errors}
         required
-      />
+      /> */}
     </div>
   );
 

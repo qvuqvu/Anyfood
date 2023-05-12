@@ -1,8 +1,14 @@
 "use client";
-
+import {
+  FieldValues,
+  SubmitHandler,
+  useForm,
+  useFieldArray,
+} from "react-hook-form";
+import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -31,10 +37,11 @@ const PostModal = () => {
   const [star, setStar] = React.useState<number | null>(2);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(STEPS.CATEGORY);
-
+  const { data: session } = useSession();
   const {
     register,
     handleSubmit,
+    control,
     setValue,
     watch,
     formState: { errors },
@@ -44,11 +51,15 @@ const PostModal = () => {
       rate: "",
       category: "",
       address: "",
-      images: "",
+      images: [],
       title: "",
       content: "",
-      tags: "",
+      tags: [],
     },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "tags",
   });
 
   const location = watch("location");
@@ -71,15 +82,27 @@ const PostModal = () => {
     setStep((value) => value + 1);
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = () => {
     if (step !== STEPS.DESCRIPTION) {
       return onNext();
     }
-
+    console.log("hi");
     setIsLoading(true);
-
+    const data = {
+      title: "hi",
+      content: "hi",
+      address: "history",
+      tags: [],
+      images: [],
+      category: "h",
+      locationId: "hi",
+    };
     axios
-      .post("/api/postListing", data)
+      .post("http://localhost:2002/api/v1/posts", data, {
+        headers: {
+          Authorization: `Bearer ${session?.user?.data.accessToken}`,
+        },
+      })
       .then(() => {
         toast.success("Listing created!");
         router.refresh();
@@ -223,15 +246,18 @@ const PostModal = () => {
           errors={errors}
           required
         />
-         <hr />
-        <Input
-          id="tags"
-          label="Tags"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-        />
+        <hr />
+        {fields.map((field, index) => (
+          <div key={field.id}>
+            <input type="text" {...register(`tags`, { required: true })} />
+            <button type="button" onClick={() => remove(index)}>
+              Remove
+            </button>
+          </div>
+        ))}
+        <button type="button" onClick={() => append("")}>
+          Add Tag
+        </button>
       </div>
     );
   }
