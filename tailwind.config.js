@@ -22,6 +22,8 @@ module.exports = {
       mobile: "320px",
       tablet: "768px",
       laptop: "1024px",
+      large: "1280px",
+      huge: "1536px"
     },
     fontFamily: {
       sans: ["Roboto", "sans-serif"],
