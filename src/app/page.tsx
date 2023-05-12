@@ -58,11 +58,11 @@ export default function Home() {
             pt-24
             grid 
             grid-cols-1 
-            mopile:grid-cols-2 
-            tablet:grid-cols-3 
-            laptop:grid-cols-4
-            large:grid-cols-5
-            huge:grid-cols-6
+            mopile:grid-cols-1 
+            tablet:grid-cols-2 
+            laptop:grid-cols-3
+            large:grid-cols-4
+            huge:grid-cols-5
             gap-8
           "
             >
