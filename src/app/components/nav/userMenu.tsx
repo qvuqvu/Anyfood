@@ -25,7 +25,7 @@ function UserMenu() {
 
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
-  console.log({session});
+  console.log({ session });
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
@@ -38,6 +38,18 @@ function UserMenu() {
     postModal.onOpen();
   }, [loginModal, postModal, session?.user]);
 
+  const connectWallet = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts[0]);
+      // setAddress(accounts[0]);
+      // setAccounts(accounts[0]);
+    } else {
+      console.log("Metamask is not installed.");
+    }
+  };
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
@@ -108,7 +120,10 @@ function UserMenu() {
                   label="Settings"
                   onClick={() => router.push("/favorites")}
                 />
-
+                <MenuItem
+                  label="Connect wallet"
+                  onClick={() => connectWallet()}
+                />
                 <hr />
                 <MenuItem label="Logout" onClick={() => signOut()} />
               </>
