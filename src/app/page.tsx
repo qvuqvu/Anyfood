@@ -15,15 +15,17 @@ import Container from "./components/Container";
 import { useState, useEffect } from "react";
 import ListingCard from "./components/posts/ListingCard";
 import axios from "axios";
+import UserStatus from "./components/UserStatus";
+import { useSession } from "next-auth/react";
 export default function Home() {
   const [posts, setPosts] = useState([]);
-
+  const { data: session } = useSession();
   useEffect(() => {
     axios
       .get("http://localhost:2002/api/v1/posts?page=1&limit=10")
       .then((response) => {
         setPosts(response.data.data);
-        console.log(posts)
+        console.log(posts);
       })
       .catch((error) => {
         console.log(error);
@@ -41,9 +43,18 @@ export default function Home() {
   return (
     <ClientOnly>
       <Container>
-        <div
-          className="
-            px-24
+        <div className="flex px-20">
+          <div className="flex-auto">
+            <div className="rounded-lg">
+              <img
+                src="/images/banner.png"
+                alt="Moving Image"
+                className="rounded-3xl w-11/12"
+              />
+            </div>
+            <div
+              className=" 
+          
             pt-24
             grid 
             grid-cols-1 
@@ -54,14 +65,29 @@ export default function Home() {
             huge:grid-cols-6
             gap-8
           "
-        >
-          {posts.map((post: any) => (
-            <ListingCard
-              // currentUser={currentUser}
-              key={post.id}
-              data={post}
-            />
-          ))}
+            >
+              {posts.map((post: any) => (
+                <ListingCard
+                  // currentUser={currentUser}
+                  key={post.id}
+                  data={post}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="">
+            {!session ? (
+              <div>Hi </div>
+            ) : (
+              <UserStatus
+                firstName={session.user.data.user.firstName}
+                lastName={session.user.data.user.lastName}
+                totalPosts={session.user.data.totalPost}
+                totalFollowers={session.user.data.user.followersCount}
+                totalFollowing={session.user.data.user.followingCount}
+              />
+            )}
+          </div>
         </div>
       </Container>
     </ClientOnly>

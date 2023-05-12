@@ -24,7 +24,7 @@ function Navbar() {
       >
         <Container>
           <Logo />
-        
+
           <div className="hidden tablet:block">
             {/* <ul className=" flex gap-2">
               <li>
