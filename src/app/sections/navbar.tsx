@@ -7,13 +7,15 @@ import useScrollPosition from "../components/hooks/useScrollPosition";
 import UserMenu from "../components/nav/userMenu";
 import Container from "../components/Container";
 import Categories from "../components/nav/categories";
+import Image from "next/image";
+import Logo from "../components/nav/Logo";
 
 function Navbar() {
   const scrollY = useScrollPosition();
   const router = useRouter();
 
   return (
-    <div className="z-50 w-full bg-white shadow-sm">
+    <div className="z-50 w-full bg-white shadow-sm overflow-hidden">
       <div
         className="
           py-4 
@@ -21,9 +23,10 @@ function Navbar() {
         "
       >
         <Container>
-          <div className="font-pops h5 text-primary font-normal">Anyfood</div>
+          <Logo />
+        
           <div className="hidden tablet:block">
-            <ul className=" flex gap-2">
+            {/* <ul className=" flex gap-2">
               <li>
                 <LinkButton path="/about">About us</LinkButton>
               </li>
@@ -33,7 +36,7 @@ function Navbar() {
               <li>
                 <LinkButton path="/community">Community</LinkButton>
               </li>
-            </ul>
+            </ul> */}
           </div>
           <div
             className=" flex 
@@ -48,6 +51,12 @@ function Navbar() {
         </Container>
       </div>
       <Categories />
+      <div
+        className="w-screen
+      "
+      >
+        <img src="/images/bg.png" alt="Moving Image" className="w-full" />
+      </div>
     </div>
   );
 }

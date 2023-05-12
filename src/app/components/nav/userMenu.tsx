@@ -57,12 +57,15 @@ function UserMenu() {
           onClick={onPost}
           className="
            text-primary
+           bg-secondary
+           border-primary
             text-sm 
             font-semibold 
             py-3 
             px-4 
             rounded-full 
-            hover:bg-secondary
+            hover:bg-pumpkin
+            hover:text-white
             transition 
             cursor-pointer
           "
