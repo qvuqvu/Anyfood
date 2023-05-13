@@ -12,6 +12,7 @@ import MenuItem from "./menuItem";
 import Avatar from "./Avatar";
 import { signIn, signOut, useSession } from "next-auth/react";
 import usePostModal from "../hooks/usePostModal";
+import useWithdrawModal from "../hooks/useWithdrawModal";
 interface UserMenuProps {
   currentUser?: SafeUser | null;
 }
@@ -22,7 +23,8 @@ function UserMenu() {
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const postModal = usePostModal();
-
+  const withdrawModal = useWithdrawModal();
+  const [accounts, setAddress] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
   console.log({ session });
@@ -43,13 +45,21 @@ function UserMenu() {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
+
       console.log(accounts[0]);
-      // setAddress(accounts[0]);
+      setAddress(accounts[0]);
+      withdrawModal.address = accounts[0];
       // setAccounts(accounts[0]);
     } else {
       console.log("Metamask is not installed.");
     }
   };
+
+  function formatAddress(address) {
+    return `Connected to ${address.slice(0, 6)}...${address.slice(
+      address.length - 4
+    )}`;
+  }
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
@@ -99,7 +109,7 @@ function UserMenu() {
       {isOpen && (
         <div
           className="
-          z-50
+          z-60
             absolute 
             rounded-xl 
             shadow-md
@@ -124,11 +134,27 @@ function UserMenu() {
                   onClick={() => router.push("/favorites")}
                 />
                 <MenuItem
-                  label="Connect wallet"
+                  label={formatAddress(accounts) || "Connect wallet"}
                   onClick={() => connectWallet()}
                 />
+                {accounts && (
+                  <MenuItem
+                    label={"Withdraw token"}
+                    onClick={withdrawModal.onOpen}
+                  />
+                )}
                 <hr />
                 <MenuItem label="Logout" onClick={() => signOut()} />
+                <div className="flex flex-col rounded-lg shadow-lg ">
+                  <div className="text-pumpkin">
+                    <div className="font-pops font-bold ">Reward:</div>
+                    <div>{session?.user.data.user.reward}</div>
+                  </div>
+                  <div className=" text-rose-60">
+                    <div className="font-pops font-bold">Token:</div>
+                    <div>{withdrawModal.token}</div>
+                  </div>
+                </div>
               </>
             ) : (
               <>

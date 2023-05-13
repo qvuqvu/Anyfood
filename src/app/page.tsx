@@ -53,9 +53,15 @@ export default function Home() {
                 className="rounded-3xl w-11/12"
               />
             </div>
+            {/* GREETING */}
+            {!session ? null : (
+              <div className="font-pops text-[25px] mt-5 text-primary">
+                Hi there, <strong>{session.user.data.user.firstName}!</strong>
+              </div>
+            )}
             <div
               className=" 
-            pt-24
+            mt-9
             grid 
             grid-cols-1 
             mopile:grid-cols-1 

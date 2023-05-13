@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import Providers from "./actions/Providers";
 import PostModal from "./components/modals/postModal";
 import Footer from "./components/footer";
+import WithdrawModal from "./components/modals/withdrawModal";
 interface IProps {
   children: ReactNode;
 }
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: IProps) {
           <PostModal />
           <LoginModal />
           <ResgisterModal />
+          <WithdrawModal />
           <Navbar />
         </ClientOnly>
 

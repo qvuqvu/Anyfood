@@ -5,7 +5,7 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import axios from "axios";
 import ClientOnly from "@/app/components/ClientOnly";
 import EmptyState from "@/app/components/EmptyState";
-import PostClient from "./PostClient";
+import PostClient from "./PostClient"
 import { useState, useEffect } from "react";
 interface IParams {
   listingId?: string;
@@ -40,7 +40,7 @@ const PostPage = ({ params }: { params: any }) => {
 
   return (
     <ClientOnly>
-      <PostClient listing={data} />
+      <PostClient listing={data}  />
     </ClientOnly>
   );
 };

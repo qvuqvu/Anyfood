@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 // import { Range } from "react-date-range";
 import { useRouter } from "next/navigation";
-
+import { IoMdClose } from "react-icons/io";
 import useLoginModal from "@/app/components/hooks/useLoginModal";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
 
@@ -16,12 +16,9 @@ import ListingHead from "@/app/components/posts/ListingHead";
 import ListingInfo from "@/app/components/posts/ListingInfo";
 import UserStatus from "@/app/components/UserStatus";
 import useDate from "@/app/components/hooks/useDate";
-const initialDateRange = {
-  startDate: new Date(),
-  endDate: new Date(),
-  key: "selection",
-};
-
+import { useSession } from "next-auth/react";
+import Avatar from "@/app/components/nav/Avatar";
+import useCommentsStore from "@/app/components/hooks/useComment";
 interface ListingClientProps {
   reservations?: SafeReservation[];
   listing: SafeListing & {
@@ -35,6 +32,8 @@ const PostClient: React.FC<ListingClientProps> = ({
   reservations = [],
   currentUser,
 }) => {
+  const { data: session } = useSession();
+
   const loginModal = useLoginModal();
   const router = useRouter();
   console.log("listing:", listing);
@@ -47,11 +46,64 @@ const PostClient: React.FC<ListingClientProps> = ({
     hour: "numeric",
     minute: "numeric",
   });
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+
+  
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:2002/api/v1/posts/${listing.data.post.id}/commentPost?direction=DESC&page=1&limit=5&sortBy=createdAt`
+      )
+      .then((response) => {
+        setComments(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [listing.data.post.id]);
+
+  const deleteComment = async (commentId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:2002/api/v1/posts/${commentId}/commentPost`,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user?.data.accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    axios
+      .post(
+        `http://localhost:2002/api/v1/posts/${listing.data.post.id}/commentPost`,
+        {
+          content: comment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user?.data.accessToken}`,
+          },
+        }
+      )
+      .then(() => {
+        setComment("");
+        setComments([...comments, response.data.comment]);
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <>
       <div
         className="flex max-w-[2520px]
+        mt-10
         mx-auto
         laptop:px-28
         tablet:px-14
@@ -85,6 +137,42 @@ const PostClient: React.FC<ListingClientProps> = ({
                     description={listing.data.post.content}
                   />
                 </div>
+                {/* ADD COMMENT */}
+                <form onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    placeholder="Add a comment..."
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="bg-primary ml-3 text-white p-4 rounded-xl font-pops"
+                  >
+                    Comment
+                  </button>
+                </form>
+                {/* GET COMMENTS */}
+
+                {comments.map((comment) => (
+                  <div key={comment.id}>
+                    <div className="shadow-lg p-3 border-[1px] border-gray-300 rounded-lg gap-3 flex flex-col w-[50%]">
+                      <div className="flex items-center p-4 rounded-t justify-center relative border-b-[1px]">
+                        <button className="p-1 border-0 hover:opacity-70 transition absolute right-3">
+                          <IoMdClose size={24} onClick={deleteComment} />
+                        </button>
+                      </div>
+                      {/* <div className="text-lg font-pops">{title}</div> */}
+                      <div className="flex items-center gap-2">
+                        <Avatar />
+                        <p className="font-pops font-bold">
+                          {comment.user.lastName} {comment.user.firstName}{" "}
+                        </p>
+                      </div>
+                      <p className="">{comment.comment.content}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -94,6 +182,9 @@ const PostClient: React.FC<ListingClientProps> = ({
           <UserStatus
             firstName={listing.data.user.firstName}
             lastName={listing.data.user.lastName}
+            totalFollowers={listing.data.user.followersCount}
+            totalFollowing={listing.data.user.followingCount}
+            totalPosts={listing.data.postCountUser}
           />
         </div>
       </div>
