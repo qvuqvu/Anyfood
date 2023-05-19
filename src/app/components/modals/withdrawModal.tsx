@@ -77,7 +77,7 @@ const WithdrawModal = () => {
         }
       )
       .then(() => {
-        withdrawModal.token = response.data;
+        // withdrawModal.token = response.data;
         
       })
       .catch((error) => {
