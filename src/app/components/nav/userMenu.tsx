@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 // import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,8 @@ import Avatar from "./Avatar";
 import { signIn, signOut, useSession } from "next-auth/react";
 import usePostModal from "../hooks/usePostModal";
 import useWithdrawModal from "../hooks/useWithdrawModal";
+import { ethers } from "ethers";
+import tokenAbi from "../../contract/token.json";
 interface UserMenuProps {
   currentUser?: SafeUser | null;
 }
@@ -20,14 +22,21 @@ interface UserMenuProps {
 function UserMenu() {
   const router = useRouter();
 
+  /**Init contract */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const addressToken = "0x3A54a26f812A163113C298090aa35Ef084aE5ad7";
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const contractToken = new ethers.Contract(addressToken, tokenAbi, provider);
+
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const postModal = usePostModal();
   const withdrawModal = useWithdrawModal();
   const [accounts, setAddress] = useState("");
+  const [amountToken, setAmountToken] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
-  console.log({ session });
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
@@ -40,26 +49,46 @@ function UserMenu() {
     postModal.onOpen();
   }, [loginModal, postModal, session?.user]);
 
+  /**connect metamask */
   const connectWallet = async () => {
     if (typeof window.ethereum !== "undefined") {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-
-      console.log(accounts[0]);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      setAmountToken(ethers.utils.formatEther(await contractToken.balanceOf(accounts[0])));
       setAddress(accounts[0]);
-      withdrawModal.address = accounts[0];
-      // setAccounts(accounts[0]);
     } else {
       console.log("Metamask is not installed.");
     }
   };
 
-  function formatAddress(address) {
-    return `Connected to ${address.slice(0, 6)}...${address.slice(
-      address.length - 4
-    )}`;
-  }
+  /**get account when reload app */
+  useEffect(() => {
+    const reload = async () => {
+      if (window.ethereum) {
+        const accounts = await provider.send("eth_accounts", []);
+        if (accounts.length > 0) {
+          setAmountToken(ethers.utils.formatEther(await contractToken.balanceOf(accounts[0])));
+          setAddress(accounts[0]);
+        }
+      } else {
+        console.log("MetaMask don't install.");
+      }
+    };
+    reload();
+  }, []);
+
+  /**Get account when change account */
+  useEffect(() => {
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", async (accounts: any) => {
+        setAmountToken(ethers.utils.formatEther(await contractToken.balanceOf(accounts[0])));
+        setAddress(accounts[0]);
+        setAddress(accounts[0]);
+      });
+    } else {
+      console.log("MetaMask don't install.");
+    }
+  }, []);
+
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
@@ -82,6 +111,32 @@ function UserMenu() {
         >
           Post a review
         </div>
+        {!accounts ? (
+          <div
+            onClick={connectWallet}
+            className="
+            text-primary
+            bg-secondary
+            border-primary
+              text-sm 
+              font-semibold 
+              py-3 
+              px-4 
+              rounded-full 
+             hover:bg-pumpkin
+             hover:text-white
+              transition 
+              cursor-pointer"
+          >
+            Connect Metamask
+          </div>
+        ) : (
+          <div>
+            Connected to {accounts.slice(0, 6)}...
+            {accounts.slice(accounts.length - 4)}
+          </div>
+        )}
+
         <div
           onClick={toggleOpen}
           className="
@@ -105,6 +160,8 @@ function UserMenu() {
             <Avatar src={currentUser?.image} />
           </div> */}
         </div>
+
+        <div>Token: {amountToken}</div>
       </div>
       {isOpen && (
         <div
@@ -125,24 +182,10 @@ function UserMenu() {
           <div className="flex flex-col cursor-pointer">
             {session?.user ? (
               <>
-                <MenuItem
-                  label="My profile"
-                  onClick={() => router.push("/trips")}
-                />
-                <MenuItem
-                  label="Settings"
-                  onClick={() => router.push("/favorites")}
-                />
-                <MenuItem
-                  label={formatAddress(accounts) || "Connect wallet"}
-                  onClick={() => connectWallet()}
-                />
-                {accounts && (
-                  <MenuItem
-                    label={"Withdraw token"}
-                    onClick={withdrawModal.onOpen}
-                  />
-                )}
+                <MenuItem label="My profile" onClick={() => router.push("/trips")} />
+                <MenuItem label="Settings" onClick={() => router.push("/favorites")} />
+                {/* <MenuItem label={formatAddress(accounts) || "Connect wallet"} onClick={() => connectWallet()} /> */}
+                {accounts && <MenuItem label={"Withdraw token"} onClick={withdrawModal.onOpen} />}
                 <hr />
                 <MenuItem label="Logout" onClick={() => signOut()} />
                 <div className="flex flex-col rounded-lg shadow-lg ">

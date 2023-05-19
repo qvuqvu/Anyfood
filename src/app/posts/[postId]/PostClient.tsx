@@ -19,6 +19,10 @@ import useDate from "@/app/components/hooks/useDate";
 import { useSession } from "next-auth/react";
 import Avatar from "@/app/components/nav/Avatar";
 import useCommentsStore from "@/app/components/hooks/useComment";
+
+import tokenAbi from "../../contract/token.json";
+import { ethers } from "ethers";
+
 interface ListingClientProps {
   reservations?: SafeReservation[];
   listing: SafeListing & {
@@ -27,18 +31,12 @@ interface ListingClientProps {
   currentUser?: SafeUser | null;
 }
 
-const PostClient: React.FC<ListingClientProps> = ({
-  listing,
-  reservations = [],
-  currentUser,
-}) => {
+const PostClient: React.FC<ListingClientProps> = ({ listing, reservations = [], currentUser }) => {
   const { data: session } = useSession();
 
   const loginModal = useLoginModal();
   const router = useRouter();
-  console.log("listing:", listing);
   const [isLoading, setIsLoading] = useState(false);
-  console.log(listing.data.location[0].name);
   const formattedDate = useDate(listing.data.post.createdAt, {
     year: "numeric",
     month: "long",
@@ -46,10 +44,18 @@ const PostClient: React.FC<ListingClientProps> = ({
     hour: "numeric",
     minute: "numeric",
   });
+
+  /**Init contract */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const addressToken = "0x3A54a26f812A163113C298090aa35Ef084aE5ad7";
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const signer = provider.getSigner();
+  const contractToken = new ethers.Contract(addressToken, tokenAbi, signer);
+
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
 
-  
   useEffect(() => {
     axios
       .get(
@@ -65,14 +71,11 @@ const PostClient: React.FC<ListingClientProps> = ({
 
   const deleteComment = async (commentId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:2002/api/v1/posts/${commentId}/commentPost`,
-        {
-          headers: {
-            Authorization: `Bearer ${session?.user?.data.accessToken}`,
-          },
-        }
-      );
+      const response = await axios.delete(`http://localhost:2002/api/v1/posts/${commentId}/commentPost`, {
+        headers: {
+          Authorization: `Bearer ${session?.user?.data.accessToken}`,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -99,6 +102,15 @@ const PostClient: React.FC<ListingClientProps> = ({
       .catch((error) => console.log(error));
   };
 
+  const donate = async () => {
+    const amount = ethers.utils.parseUnits("0.1", 18);
+    const transaction = await contractToken.transfer(listing.data.user.account, amount);
+    // console.log("Giao dịch đang được gửi:", transaction.hash);
+    // // Đợi giao dịch được xác nhận
+    // await transaction.wait();
+    // console.log("Giao dịch thành công:", transaction.hash);
+  };
+
   return (
     <>
       <div
@@ -117,6 +129,12 @@ const PostClient: React.FC<ListingClientProps> = ({
           <div className="">
             <div className="max-w-screen-lg mb-8 mx-auto shadow-lg p-5 border-gray-200 border-[1px] rounded-2xl">
               <div className="flex flex-col gap-6">
+                <div
+                  onClick={donate}
+                  className="text-primary bg-secondary border-primary text-sm  font-semibold py-3 px-4 rounded-full hover:bg-pumpkinhover:text-white transition cursor-pointer"
+                >
+                  Donate
+                </div>
                 <ListingHead
                   rate={listing.data.post.rate}
                   title={listing.data.post.title}
@@ -124,18 +142,11 @@ const PostClient: React.FC<ListingClientProps> = ({
                   locationValue={listing.data.location[0].name}
                   timePosted={formattedDate}
                   id={listing.id}
-                  userName={
-                    listing.data.user.lastName +
-                    " " +
-                    listing.data.user.firstName
-                  }
+                  userName={listing.data.user.lastName + " " + listing.data.user.firstName}
                   currentUser={currentUser}
                 />
                 <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 mt-6">
-                  <ListingInfo
-                    tags={listing.data.post.tags}
-                    description={listing.data.post.content}
-                  />
+                  <ListingInfo tags={listing.data.post.tags} description={listing.data.post.content} />
                 </div>
                 {/* ADD COMMENT */}
                 <form onSubmit={handleSubmit}>
@@ -145,10 +156,7 @@ const PostClient: React.FC<ListingClientProps> = ({
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                   />
-                  <button
-                    type="submit"
-                    className="bg-primary ml-3 text-white p-4 rounded-xl font-pops"
-                  >
+                  <button type="submit" className="bg-primary ml-3 text-white p-4 rounded-xl font-pops">
                     Comment
                   </button>
                 </form>
