@@ -34,7 +34,7 @@ enum STEPS {
 const PostModal = () => {
   const router = useRouter();
   const postModal = usePostModal();
-  const [star, setStar] = React.useState<number | null>(2);
+  const [star, setStar] = React.useState<number | null>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(STEPS.CATEGORY);
   const { data: session } = useSession();
@@ -48,8 +48,8 @@ const PostModal = () => {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      rate: "",
-      category: "",
+      rate: star?.toString(),
+      categoryId: "",
       address: "",
       images: [],
       title: "",
@@ -65,7 +65,7 @@ const PostModal = () => {
   const location = watch("location");
   const category = watch("category");
   const images = watch("image");
-  const rate = watch("rate");
+  // const rate = watch("rate");
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
       shouldDirty: true,
@@ -75,6 +75,7 @@ const PostModal = () => {
   };
 
   const onBack = () => {
+    console.log(step);
     setStep((value) => value - 1);
   };
 
@@ -82,21 +83,14 @@ const PostModal = () => {
     setStep((value) => value + 1);
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = () => {
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(star);
     if (step !== STEPS.DESCRIPTION) {
       return onNext();
     }
-    console.log("hi");
+
     setIsLoading(true);
-    const data = {
-      title: "hi",
-      content: "hi",
-      address: "history",
-      tags: [],
-      images: [],
-      category: "h",
-      locationId: "hi",
-    };
+
     axios
       .post("http://localhost:2002/api/v1/posts", data, {
         headers: {
@@ -119,6 +113,7 @@ const PostModal = () => {
   };
 
   const actionLabel = useMemo(() => {
+    console.log(step);
     if (step === STEPS.DESCRIPTION) {
       return "Create";
     }
@@ -153,7 +148,7 @@ const PostModal = () => {
         {categoriesList.map((item) => (
           <div key={item.label} className="col-span-1">
             <CategoryBox
-              onClick={(category) => setCustomValue("category", category)}
+              onClick={(category) => setCustomValue("categoryId", category)}
               selected={category === item.label}
               label={item.label}
             />
@@ -198,7 +193,7 @@ const PostModal = () => {
           className="self-center"
           size="large"
           name="simple-controlled"
-          value={rate}
+          value={star}
           onChange={(event, newValue) => {
             setStar(newValue);
           }}
@@ -270,7 +265,7 @@ const PostModal = () => {
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       SecondActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
+      secondaryAction={onBack}
       onClose={postModal.onClose}
       body={bodyContent}
     />
