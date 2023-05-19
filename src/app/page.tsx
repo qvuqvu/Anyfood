@@ -93,6 +93,14 @@ export default function Home() {
                 totalFollowing={session.user.data.user.followingCount}
               />
             )}
+
+            <div className="rounded-lg py-9">
+              <img
+                src="/images/bannerside.png"
+                alt="Get Token"
+                className="rounded-3xl"
+              />
+            </div>
           </div>
         </div>
       </Container>
