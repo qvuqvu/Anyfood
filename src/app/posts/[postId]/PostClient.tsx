@@ -22,6 +22,7 @@ import useCommentsStore from "@/app/components/hooks/useComment";
 
 import tokenAbi from "../../contract/token.json";
 import { ethers } from "ethers";
+import useDonateModal from "@/app/components/hooks/useDonateModal";
 
 interface ListingClientProps {
   reservations?: SafeReservation[];
@@ -31,11 +32,13 @@ interface ListingClientProps {
   currentUser?: SafeUser | null;
 }
 
-const PostClient: React.FC<ListingClientProps> = ({ listing, reservations = [], currentUser }) => {
+const PostClient: React.FC<ListingClientProps> = ({
+  listing,
+  reservations = [],
+  currentUser,
+}) => {
   const { data: session } = useSession();
-
-  const loginModal = useLoginModal();
-  const router = useRouter();
+  const donateModal = useDonateModal();
   const [isLoading, setIsLoading] = useState(false);
   const formattedDate = useDate(listing.data.post.createdAt, {
     year: "numeric",
@@ -55,7 +58,7 @@ const PostClient: React.FC<ListingClientProps> = ({ listing, reservations = [], 
 
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
-
+  console.log(listing.data.user);
   useEffect(() => {
     axios
       .get(
@@ -69,13 +72,16 @@ const PostClient: React.FC<ListingClientProps> = ({ listing, reservations = [], 
       });
   }, [listing.data.post.id]);
 
-  const deleteComment = async (commentId) => {
+  const deleteComment = async (commentId: string) => {
     try {
-      const response = await axios.delete(`http://localhost:2002/api/v1/posts/${commentId}/commentPost`, {
-        headers: {
-          Authorization: `Bearer ${session?.user?.data.accessToken}`,
-        },
-      });
+      const response = await axios.delete(
+        `http://localhost:2002/api/v1/posts/${commentId}/commentPost`,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user?.data.accessToken}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error(error);
@@ -104,7 +110,10 @@ const PostClient: React.FC<ListingClientProps> = ({ listing, reservations = [], 
 
   const donate = async () => {
     const amount = ethers.utils.parseUnits("0.1", 18);
-    const transaction = await contractToken.transfer(listing.data.user.account, amount);
+    const transaction = await contractToken.transfer(
+      listing.data.user.account,
+      amount
+    );
     // console.log("Giao dịch đang được gửi:", transaction.hash);
     // // Đợi giao dịch được xác nhận
     // await transaction.wait();
@@ -129,12 +138,6 @@ const PostClient: React.FC<ListingClientProps> = ({ listing, reservations = [], 
           <div className="">
             <div className="max-w-screen-lg mb-8 mx-auto shadow-lg p-5 border-gray-200 border-[1px] rounded-2xl">
               <div className="flex flex-col gap-6">
-                <div
-                  onClick={donate}
-                  className="text-primary bg-secondary border-primary text-sm  font-semibold py-3 px-4 rounded-full hover:bg-pumpkinhover:text-white transition cursor-pointer"
-                >
-                  Donate
-                </div>
                 <ListingHead
                   rate={listing.data.post.rate}
                   title={listing.data.post.title}
@@ -142,11 +145,24 @@ const PostClient: React.FC<ListingClientProps> = ({ listing, reservations = [], 
                   locationValue={listing.data.location[0].name}
                   timePosted={formattedDate}
                   id={listing.id}
-                  userName={listing.data.user.lastName + " " + listing.data.user.firstName}
+                  userName={
+                    listing.data.user.lastName +
+                    " " +
+                    listing.data.user.firstName
+                  }
                   currentUser={currentUser}
                 />
                 <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 mt-6">
-                  <ListingInfo tags={listing.data.post.tags} description={listing.data.post.content} />
+                  <ListingInfo
+                    tags={listing.data.post.tags}
+                    description={listing.data.post.content}
+                  />
+                </div>
+                <div
+                  onClick={donate}
+                  className="w-28 text-primary bg-secondary border-primary text-sm  font-semibold py-3 px-4 rounded-full hover:bg-pumpkin hover:text-white transition cursor-pointer"
+                >
+                  Donate
                 </div>
                 {/* ADD COMMENT */}
                 <form onSubmit={handleSubmit}>
@@ -156,10 +172,16 @@ const PostClient: React.FC<ListingClientProps> = ({ listing, reservations = [], 
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                   />
-                  <button type="submit" className="bg-primary ml-3 text-white p-4 rounded-xl font-pops">
+                  <button
+                    type="submit"
+                    className="bg-primary ml-3 text-white p-4 rounded-xl font-pops"
+                  >
                     Comment
                   </button>
                 </form>
+
+                {/* DONATE */}
+
                 {/* GET COMMENTS */}
 
                 {comments.map((comment) => (
