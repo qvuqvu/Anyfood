@@ -55,6 +55,7 @@ function UserMenu() {
       const accounts = await provider.send("eth_requestAccounts", []);
       setAmountToken(ethers.utils.formatEther(await contractToken.balanceOf(accounts[0])));
       setAddress(accounts[0]);
+      withdrawModal.address = accounts[0];
     } else {
       console.log("Metamask is not installed.");
     }
@@ -68,6 +69,7 @@ function UserMenu() {
         if (accounts.length > 0) {
           setAmountToken(ethers.utils.formatEther(await contractToken.balanceOf(accounts[0])));
           setAddress(accounts[0]);
+          withdrawModal.address = accounts[0];
         }
       } else {
         console.log("MetaMask don't install.");
@@ -83,6 +85,7 @@ function UserMenu() {
         setAmountToken(ethers.utils.formatEther(await contractToken.balanceOf(accounts[0])));
         setAddress(accounts[0]);
         setAddress(accounts[0]);
+        withdrawModal.address = accounts[0];
       });
     } else {
       console.log("MetaMask don't install.");

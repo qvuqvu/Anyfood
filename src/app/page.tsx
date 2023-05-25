@@ -46,12 +46,8 @@ export default function Home() {
       <Container>
         <div className="flex px-20 pb-5">
           <div className="flex-auto">
-            <div className="rounded-lg">
-              <img
-                src="/images/banner.png"
-                alt="Moving Image"
-                className="rounded-3xl w-11/12"
-              />
+            <div className="rounded-lg mt-5">
+              <img src="/images/banner.png" alt="Moving Image" className="rounded-3xl w-11/12" />
             </div>
             {/* GREETING */}
             {!session ? null : (
@@ -95,11 +91,7 @@ export default function Home() {
             )}
 
             <div className="rounded-lg py-9">
-              <img
-                src="/images/bannerside.png"
-                alt="Get Token"
-                className="rounded-3xl"
-              />
+              <img src="/images/bannerside.png" alt="Get Token" className="rounded-3xl" />
             </div>
           </div>
         </div>
