@@ -75,7 +75,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
               group-hover:scale-110 
               transition
             "
-            src="https://aws-s3-nodejs-reviewfood.s3.us-east-1.amazonaws.com/1683840057235-f5f9a059-bf6e-4aca-af88-9ebb371a6226.jpeg"
+            src={data.post.images[0]}
             alt="Listing"
           />
           <div
