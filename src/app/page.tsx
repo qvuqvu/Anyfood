@@ -112,7 +112,7 @@ export default function Home() {
               />
             )}
 
-            <div className="rounded-lg py-9 hover:scale-105 transition">
+            <div className="rounded-lg py-9">
               <img
                 src="/images/bannerside.png"
                 alt="Get Token"

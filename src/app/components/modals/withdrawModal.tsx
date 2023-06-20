@@ -24,7 +24,7 @@ const WithdrawModal = () => {
   } = useForm<FieldValues>({
     defaultValues: {
       amount: "",
-      address: "0xfdd59c011bf3a83b973c8e9fe5a8d243865931bc",
+      address: "0x732dDAEB58e292de16A3e1515C0908E76A578415",
     },
   });
 
@@ -78,7 +78,6 @@ const WithdrawModal = () => {
       )
       .then(() => {
         // withdrawModal.token = response.data;
-        
       })
       .catch((error) => {
         toast.error(error);
@@ -91,26 +90,9 @@ const WithdrawModal = () => {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading title="Your adddress" subtitle="Defaut wallet address" />
-      <Input
-        id="address"
-        label="address"
-        disabled
-        register={register}
-        errors={errors}
-        required
-      />
-      <Heading
-        title="Withdraw token"
-        subtitle="Please enter the exact amount to withdraw"
-      />
-      <Input
-        id="amount"
-        label="Amount"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
+      <Input id="address" label="address" disabled register={register} errors={errors} required />
+      <Heading title="Withdraw token" subtitle="Please enter the exact amount to withdraw" />
+      <Input id="amount" label="Amount" disabled={isLoading} register={register} errors={errors} required />
     </div>
   );
 
