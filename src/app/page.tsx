@@ -18,9 +18,12 @@ import axios from "axios";
 import UserStatus from "./components/UserStatus";
 import { useSession } from "next-auth/react";
 import EmptyUserStatus from "./components/EmptyUserStatus";
+import CategoryCard from "./components/categories/CategoryCard";
 export default function Home() {
   const [posts, setPosts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const { data: session } = useSession();
+
   useEffect(() => {
     axios
       .get("http://localhost:2002/api/v1/posts?page=1&limit=10")
@@ -31,55 +34,70 @@ export default function Home() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
 
-  if (posts.length === 0) {
-    return (
-      <ClientOnly>
-        <EmptyState showReset />
-      </ClientOnly>
-    );
-  }
+    axios
+      .get("http://localhost:2002/api/v1/categories")
+      .then((response) => {
+        setCategories(response.data.data);
+        console.log(categories);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <ClientOnly>
       <Container>
         <div className="flex px-20 pb-5">
-          <div className="flex-auto">
-            <div className="rounded-lg">
+          <div className="flex-auto ">
+            <div className="hover:scale-105 transition">
               <img
                 src="/images/banner.png"
                 alt="Moving Image"
-                className="rounded-3xl w-11/12"
+                className="rounded-3xl w-full"
               />
             </div>
+            <div className="flex gap-3 mt-5">
+              {categories.map((category: any) => (
+                <CategoryCard key={category.id} data={category} />
+              ))}
+            </div>
+
             {/* GREETING */}
             {!session ? null : (
               <div className="font-pops text-[25px] mt-5 text-primary">
                 Hi there, <strong>{session.user.data.user.firstName}!</strong>
               </div>
             )}
-            <div
-              className=" 
-            mt-9
-            grid 
-            grid-cols-1 
-            mopile:grid-cols-1 
-            tablet:grid-cols-2 
-            laptop:grid-cols-3
-            large:grid-cols-4
-            huge:grid-cols-5
-            gap-8
-          "
-            >
-              {posts.map((post: any) => (
-                <ListingCard
-                  // currentUser={currentUser}
-                  key={post.id}
-                  data={post}
-                />
-              ))}
-            </div>
+
+            {posts.length === 0 ? (
+              <ClientOnly>
+                <EmptyState showReset />
+              </ClientOnly>
+            ) : (
+              <div
+                className=" 
+               mt-9
+               grid 
+               grid-cols-1 
+               mopile:grid-cols-1 
+               tablet:grid-cols-2 
+               laptop:grid-cols-3
+               large:grid-cols-4
+               huge:grid-cols-5
+               gap-8
+             "
+              >
+                {posts.map((post: any) => (
+                  <ListingCard
+                    // currentUser={currentUser}
+                    key={post.id}
+                    data={post}
+                  />
+                ))}
+              </div>
+            )}
           </div>
           <div className="px-10">
             {!session ? (
@@ -94,7 +112,7 @@ export default function Home() {
               />
             )}
 
-            <div className="rounded-lg py-9">
+            <div className="rounded-lg py-9 hover:scale-105 transition">
               <img
                 src="/images/bannerside.png"
                 alt="Get Token"
