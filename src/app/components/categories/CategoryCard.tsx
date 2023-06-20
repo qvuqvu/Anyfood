@@ -16,6 +16,7 @@ import HeartButton from "../HeartButton";
 import Button from "../buttons/Button1";
 import ClientOnly from "../ClientOnly";
 import Avatar from "../nav/Avatar";
+import useCategory from "../hooks/useCategory";
 interface CategoryCardProps {
   data: SafeListing;
   onAction?: (id: string) => void;
@@ -32,7 +33,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   actionId = "",
 }) => {
   const router = useRouter();
-
+  const categoryName = useCategory();
   const handleCancel = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
@@ -45,12 +46,12 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
     },
     [disabled, onAction, actionId]
   );
-
+  const handleAction = () => {
+    router.push(`/category/${data.id}`);
+    categoryName.setCategory(data.name);
+  };
   return (
-    <div
-      // onClick={() => router.push(`/posts/${data.post.id}`)}
-      className="col-span-1 cursor-pointer"
-    >
+    <div onClick={handleAction} className="col-span-1 cursor-pointer">
       <div className="flex flex-col gap-2 hover:scale-110 transition ">
         <div className="absolute p-4 text-white font-semibold z-10 text-lg px-2">
           {data.name}
