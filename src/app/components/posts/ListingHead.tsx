@@ -5,7 +5,7 @@ import { AiFillStar } from "react-icons/ai";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 import Avatar from "../nav/Avatar";
-
+import { useRouter } from "next/navigation";
 interface ListingHeadProps {
   title: string;
   locationValue: string;
@@ -14,10 +14,12 @@ interface ListingHeadProps {
   id: string;
   currentUser?: SafeUser | null;
   userName: string;
+  userId: string;
   rate: string;
 }
 
 const ListingHead: React.FC<ListingHeadProps> = ({
+  userId,
   userName,
   title,
   locationValue,
@@ -27,11 +29,19 @@ const ListingHead: React.FC<ListingHeadProps> = ({
   currentUser,
   rate,
 }) => {
+  const router = useRouter();
+  const handleAction = () => {
+    router.push(`/user/${userId}`);
+  };
+
   return (
     <>
       <div className="text-start flex-col flex gap-2">
         <div className="text-2xl h1 text-[28px] font-bold">{title}</div>
-        <div className="flex gap-3 font-sans font-semibold">
+        <div
+          className="flex gap-3 font-sans font-semibold cursor-pointer"
+          onClick={handleAction}
+        >
           <Avatar /> {userName}
         </div>
 
