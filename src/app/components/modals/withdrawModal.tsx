@@ -90,9 +90,26 @@ const WithdrawModal = () => {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading title="Your adddress" subtitle="Defaut wallet address" />
-      <Input id="address" label="address" disabled register={register} errors={errors} required />
-      <Heading title="Withdraw token" subtitle="Please enter the exact amount to withdraw" />
-      <Input id="amount" label="Amount" disabled={isLoading} register={register} errors={errors} required />
+      <Input
+        id="address"
+        label="address"
+        disabled
+        register={register}
+        errors={errors}
+        required
+      />
+      <Heading
+        title="Withdraw token"
+        subtitle="Please enter the exact amount to withdraw"
+      />
+      <Input
+        id="amount"
+        label="Amount"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+      />
     </div>
   );
 

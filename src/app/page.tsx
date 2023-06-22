@@ -26,7 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:2002/api/v1/posts?page=1&limit=10")
+      .get("http://localhost:2002/api/v1/posts?page=1&limit=20")
       .then((response) => {
         setPosts(response.data.data);
         console.log(posts);

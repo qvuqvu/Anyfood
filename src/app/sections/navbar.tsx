@@ -44,7 +44,7 @@ function Navbar() {
             items-center 
             justify-between
             gap-2
-            md:gap-0"
+            md:gap-0 w-auto"
           >
             <UserMenu />
           </div>

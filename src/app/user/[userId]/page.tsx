@@ -53,7 +53,7 @@ const UserPage = ({ params }: { params: any }) => {
 
   return (
     <ClientOnly>
-      <UserClient listing={data} user={dataUser} />
+      <UserClient listing={data} user={dataUser} id={params.userId} />
     </ClientOnly>
   );
 };

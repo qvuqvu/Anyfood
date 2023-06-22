@@ -15,6 +15,7 @@ import usePostModal from "../hooks/usePostModal";
 import useWithdrawModal from "../hooks/useWithdrawModal";
 import { ethers } from "ethers";
 import tokenAbi from "../../contract/token.json";
+import useLocationModal from "../hooks/useLocationModal";
 interface UserMenuProps {
   currentUser?: SafeUser | null;
 }
@@ -32,6 +33,7 @@ function UserMenu() {
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const postModal = usePostModal();
+  const locationModal = useLocationModal();
   const withdrawModal = useWithdrawModal();
   const [accounts, setAddress] = useState("");
   const [amountToken, setAmountToken] = useState("");
@@ -41,6 +43,13 @@ function UserMenu() {
     setIsOpen((value) => !value);
   }, []);
 
+  const onLocation = useCallback(() => {
+    if (!session?.user) {
+      return loginModal.onOpen();
+    }
+
+    locationModal.onOpen();
+  }, [loginModal, locationModal, session?.user]);
   const onPost = useCallback(() => {
     if (!session?.user) {
       return loginModal.onOpen();
@@ -53,7 +62,9 @@ function UserMenu() {
   const connectWallet = async () => {
     if (typeof window.ethereum !== "undefined") {
       const accounts = await provider.send("eth_requestAccounts", []);
-      setAmountToken(ethers.utils.formatEther(await contractToken.balanceOf(accounts[0])));
+      setAmountToken(
+        ethers.utils.formatEther(await contractToken.balanceOf(accounts[0]))
+      );
       setAddress(accounts[0]);
       withdrawModal.address = accounts[0];
     } else {
@@ -67,7 +78,9 @@ function UserMenu() {
       if (window.ethereum) {
         const accounts = await provider.send("eth_accounts", []);
         if (accounts.length > 0) {
-          setAmountToken(ethers.utils.formatEther(await contractToken.balanceOf(accounts[0])));
+          setAmountToken(
+            ethers.utils.formatEther(await contractToken.balanceOf(accounts[0]))
+          );
           setAddress(accounts[0]);
           withdrawModal.address = accounts[0];
         }
@@ -82,7 +95,9 @@ function UserMenu() {
   useEffect(() => {
     if (window.ethereum) {
       window.ethereum.on("accountsChanged", async (accounts: any) => {
-        setAmountToken(ethers.utils.formatEther(await contractToken.balanceOf(accounts[0])));
+        setAmountToken(
+          ethers.utils.formatEther(await contractToken.balanceOf(accounts[0]))
+        );
         setAddress(accounts[0]);
         setAddress(accounts[0]);
         withdrawModal.address = accounts[0];
@@ -98,21 +113,40 @@ function UserMenu() {
         <div
           onClick={onPost}
           className="
-           text-primary
-           bg-secondary
+           text-white
+           bg-pumpkin
            border-primary
             text-sm 
             font-semibold 
             py-3 
             px-4 
             rounded-full 
-            hover:bg-pumpkin
+            hover:opacity-70
             hover:text-white
             transition 
             cursor-pointer
           "
         >
           Post a review
+        </div>
+        <div
+          onClick={onLocation}
+          className="
+           text-white
+           bg-pumpkin
+           border-primary
+            text-sm 
+            font-semibold 
+            py-3 
+            px-4 
+            rounded-full 
+            hover:opacity-70
+            hover:text-white
+            transition 
+            cursor-pointer
+          "
+        >
+          Add a location
         </div>
         {!accounts ? (
           <div
@@ -126,7 +160,7 @@ function UserMenu() {
               py-3 
               px-4 
               rounded-full 
-             hover:bg-pumpkin
+             hover:bg-primary
              hover:text-white
               transition 
               cursor-pointer"
@@ -185,10 +219,21 @@ function UserMenu() {
           <div className="flex flex-col cursor-pointer">
             {session?.user ? (
               <>
-                <MenuItem label="My profile" onClick={() => router.push("/trips")} />
-                <MenuItem label="Settings" onClick={() => router.push("/favorites")} />
+                <MenuItem
+                  label="My profile"
+                  onClick={() => router.push("/trips")}
+                />
+                <MenuItem
+                  label="Settings"
+                  onClick={() => router.push("/favorites")}
+                />
                 {/* <MenuItem label={formatAddress(accounts) || "Connect wallet"} onClick={() => connectWallet()} /> */}
-                {accounts && <MenuItem label={"Withdraw token"} onClick={withdrawModal.onOpen} />}
+                {accounts && (
+                  <MenuItem
+                    label={"Withdraw token"}
+                    onClick={withdrawModal.onOpen}
+                  />
+                )}
                 <hr />
                 <MenuItem label="Logout" onClick={() => signOut()} />
                 <div className="flex flex-col rounded-lg shadow-lg ">

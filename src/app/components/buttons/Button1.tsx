@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
 import { IconType } from "react-icons";
 
 interface ButtonProps {
   label: string;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: () => void;
   disabled?: boolean;
   outline?: boolean;
   small?: boolean;
   icon?: IconType;
 }
 
-const Button: React.FC<ButtonProps> = ({ 
-  label, 
-  onClick, 
-  disabled, 
+const Button: React.FC<ButtonProps> = ({
+  label,
+  onClick,
+  disabled,
   outline,
   small,
   icon: Icon,
 }) => {
-  return ( 
+  return (
     <button
       disabled={disabled}
       onClick={onClick}
@@ -31,13 +31,13 @@ const Button: React.FC<ButtonProps> = ({
         hover:opacity-80
         transition
         w-full
-        ${outline ? 'bg-white' : 'bg-primary'}
-        ${outline ? 'border-black' : 'border-primary'}
-        ${outline ? 'text-black' : 'text-white'}
-        ${small ? 'text-sm' : 'text-md'}'
-        ${small ? 'py-1' : 'py-3'}
-        ${small ? 'font-light' : 'font-semibold'}
-        ${small ? 'border-[1px]' : 'border-2'}
+        ${outline ? "bg-white" : "bg-primary"}
+        ${outline ? "border-black" : "border-primary"}
+        ${outline ? "text-black" : "text-white"}
+        ${small ? "text-sm" : "text-md"}'
+        ${small ? "py-1" : "py-3"}
+        ${small ? "font-light" : "font-semibold"}
+        ${small ? "border-[1px]" : "border-2"}
       `}
     >
       {Icon && (
@@ -52,7 +52,7 @@ const Button: React.FC<ButtonProps> = ({
       )}
       {label}
     </button>
-   );
-}
- 
+  );
+};
+
 export default Button;

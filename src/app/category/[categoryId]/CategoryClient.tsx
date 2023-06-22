@@ -17,7 +17,7 @@ import UserStatus from "@/app/components/UserStatus";
 import useDate from "@/app/components/hooks/useDate";
 import { useSession } from "next-auth/react";
 import Avatar from "@/app/components/nav/Avatar";
-import useCommentsStore from "@/app/components/hooks/useComment";
+// import useCommentsStore from "@/app/components/hooks/useComment";
 
 import ListingCard from "@/app/components/posts/ListingCard";
 import ClientOnly from "@/app/components/ClientOnly";

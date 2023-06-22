@@ -17,12 +17,12 @@ import Button from "../buttons/Button1";
 import ClientOnly from "../ClientOnly";
 import Avatar from "../nav/Avatar";
 interface ListingCardProps {
-  data: SafeListing;
+  data: any;
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
   actionId?: string;
-  currentUser?: SafeUser | null;
+  currentUser?: any;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
@@ -93,7 +93,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           {data.post.title}
         </div>
         <div className="flex p-3 gap-2">
-          <Avatar/>
+          <Avatar />
           <div className="font-light text-neutral-500 ">
             {data.user.firstName} {data.user.lastName}
           </div>

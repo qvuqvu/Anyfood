@@ -39,7 +39,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
       <div className="text-start flex-col flex gap-2">
         <div className="text-2xl h1 text-[28px] font-bold">{title}</div>
         <div
-          className="flex gap-3 font-sans font-semibold cursor-pointer"
+          className="flex gap-3 font-sans font-semibold cursor-pointer hover:opacity-70"
           onClick={handleAction}
         >
           <Avatar /> {userName}

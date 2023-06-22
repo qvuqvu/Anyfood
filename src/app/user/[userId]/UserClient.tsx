@@ -18,23 +18,49 @@ import useDate from "@/app/components/hooks/useDate";
 import { useSession } from "next-auth/react";
 import Avatar from "@/app/components/nav/Avatar";
 // import useCommentsStore from "@/app/components/hooks/useComment";
-
+import { BsPersonPlus } from "react-icons/bs";
+import { BsPersonDashFill } from "react-icons/bs";
 import ListingCard from "@/app/components/posts/ListingCard";
 import ClientOnly from "@/app/components/ClientOnly";
 import EmptyState from "@/app/components/EmptyState";
 import useCategory from "@/app/components/hooks/useCategory";
+import Button from "@/app/components/buttons/Button1";
+import { response } from "express";
+import { Toast } from "react-toastify/dist/components";
 interface ListingClientProps {
   listing: any;
   user: any;
+  id: string;
 }
 
-const UserClient: React.FC<ListingClientProps> = ({ listing, user }) => {
-  console.log(listing);
-  console.log("hi" + user);
+const UserClient: React.FC<ListingClientProps> = ({ listing, user, id }) => {
+  const { data: session } = useSession();
+  const [followed, setFollow] = useState(false);
+  const onSubmit = () => {
+    handleFollow(id);
+  };
+  const handleFollow = async (id: string) => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:2002/api/v1/user/${id}/follow`,
+        id,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user?.data.accessToken}`,
+          },
+        }
+      );
+      return response.data && setFollow(!followed);
+    } catch (error) {
+      console.error(error);
+      toast.success("Something went wrong.");
+    }
+  };
+
   return (
     <>
       <div
-        className="flex flex-col max-w-[2520px]
+        className="flex flex-col items-center max-w-[2520px]
         mt-10
         mx-auto
         tablet:px-14
@@ -43,12 +69,41 @@ const UserClient: React.FC<ListingClientProps> = ({ listing, user }) => {
         gap-4
         "
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-5  ">
           <div className="self-center  text-h1 font-bold border-secondary border-b-2 text-primary font-pops">
             {user.data.data.firstName} {user.data.data.lastName}
           </div>
-          <div className="self-center">Total posts: {user.data.totalPost}</div>
+          {followed ? (
+            <Button
+              label="Unfollow"
+              icon={BsPersonDashFill}
+              onClick={onSubmit}
+              outline
+            />
+          ) : (
+            <Button label="Follow" icon={BsPersonPlus} onClick={onSubmit} />
+          )}
+
+          <div className="self-center flex gap-4">
+            <div className="flex flex-col items-center">
+              <div className="text-bold font-pops">{user.data.totalPost}</div>
+              <div className="text-normal text-gray-500"> Posts</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="text-bold font-pops">
+                {user.data.data.followersCount}
+              </div>
+              <div className="text-normal text-gray-500"> Followers</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="text-bold font-pops">
+                {user.data.data.followingCount}
+              </div>
+              <div className="text-normal text-gray-500"> Following</div>
+            </div>
+          </div>
         </div>
+
         {listing.data.length === 0 ? (
           <ClientOnly>
             <EmptyState showReset />
