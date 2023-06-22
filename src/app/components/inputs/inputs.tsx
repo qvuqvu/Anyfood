@@ -11,6 +11,7 @@ interface InputProps {
   formatPrice?: boolean;
   required?: boolean;
   multiple?: boolean;
+  accept?: string;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
 }
@@ -24,6 +25,7 @@ const Input: React.FC<InputProps> = ({
   register,
   required,
   errors,
+  accept,
   multiple,
 }) => {
   return (
@@ -46,7 +48,12 @@ const Input: React.FC<InputProps> = ({
         placeholder=" "
         multiple={multiple}
         type={type}
+        accept={accept}
         className={`
+          file:border-0 
+          file:bg-transparent 
+          file:text-sm 
+          file:font-medium 
           peer
           w-full
           p-4

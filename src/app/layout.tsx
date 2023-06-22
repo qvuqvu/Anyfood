@@ -8,6 +8,8 @@ import Providers from "./actions/Providers";
 import PostModal from "./components/modals/postModal";
 import Footer from "./components/footer";
 import WithdrawModal from "./components/modals/withdrawModal";
+import LocationModal from "./components/modals/locationModal";
+import ToasterProvider from "./providers/toasterProvider";
 interface IProps {
   children: ReactNode;
 }
@@ -21,6 +23,8 @@ export default function RootLayout({ children }: IProps) {
     <html lang="en">
       <Providers>
         <ClientOnly>
+          <ToasterProvider />
+          <LocationModal />
           <PostModal />
           <LoginModal />
           <ResgisterModal />
