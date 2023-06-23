@@ -50,7 +50,7 @@ function Navbar() {
           </div>
         </Container>
       </div>
-      <Categories />
+      {/* <Categories /> */}
       <div
         className="w-screen
       "
