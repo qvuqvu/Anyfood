@@ -1,6 +1,9 @@
 import Container from "../Container";
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from "next/navigation";
 import CategoryBox from "./categoryBox";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 export const categoriesList = [
   {
     label: "Ăn sáng",
@@ -29,6 +32,17 @@ export const categoriesList = [
   },
 ];
 const Categories = () => {
+  useEffect(() => {
+    axios
+      .get("http://localhost:2002/api/v1/posts?page=1&limit=20")
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  const [categories, setCategories] = useState([]);
   const params = useSearchParams();
   const category = params?.get("category");
   const pathname = usePathname();

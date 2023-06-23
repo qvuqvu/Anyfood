@@ -14,6 +14,7 @@ interface InputProps {
   accept?: string;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -49,6 +50,7 @@ const Input: React.FC<InputProps> = ({
         multiple={multiple}
         type={type}
         accept={accept}
+        onChange={e => {}}
         className={`
           file:border-0 
           file:bg-transparent 

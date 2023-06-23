@@ -18,11 +18,12 @@ import Modal from "./Modal";
 import Counter from "../inputs/Counter";
 import CategoryBox from "../inputs/CategoryInput";
 import CountrySelect from "../inputs/CountrySelect";
-import { categoriesList } from "../nav/categories";
+// import { categoriesList } from "../nav/categories";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/inputs";
 import Heading from "../Heading";
 import React from "react";
+import { useEffect } from "react";
 enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
@@ -32,6 +33,26 @@ enum STEPS {
 }
 
 const PostModal = () => {
+  useEffect(() => {
+    axios
+      .get("http://localhost:2002/api/v1/locations?page=1&limit=5")
+      .then((response) => {
+        setLocations(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios
+      .get("http://localhost:2002/api/v1/categories")
+      .then((response) => {
+        setCategories(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  const [categories, setCategories] = useState([]);
+  const [locations, setLocations] = useState([]);
   const router = useRouter();
   const postModal = usePostModal();
   const [star, setStar] = React.useState<number | null>(0);
@@ -51,6 +72,7 @@ const PostModal = () => {
       rate: star?.toString(),
       categoryId: "",
       address: "",
+      locationId: "",
       images: [],
       title: "",
       content: "",
@@ -62,8 +84,8 @@ const PostModal = () => {
     name: "tags",
   });
 
-  const location = watch("location");
-  const category = watch("category");
+  const category = watch("categoryId");
+  const location = watch("locationId");
   const images = watch("image");
   // const rate = watch("rate");
   const setCustomValue = (id: string, value: any) => {
@@ -73,7 +95,10 @@ const PostModal = () => {
       shouldValidate: true,
     });
   };
-
+  //  const handleLocation = (value: any, address: string) => {
+  //     setCustomValue("locationId", value);
+  //     setValue("address", item.location.address);
+  //   };
   const onBack = () => {
     console.log(step);
     setStep((value) => value - 1);
@@ -98,7 +123,7 @@ const PostModal = () => {
         },
       })
       .then(() => {
-        toast.success("Listing created!");
+        toast.success("Post created!");
         router.refresh();
         reset();
         setStep(STEPS.CATEGORY);
@@ -145,12 +170,13 @@ const PostModal = () => {
           overflow-y-auto
         "
       >
-        {categoriesList.map((item) => (
-          <div key={item.label} className="col-span-1">
+        {categories.map((item: any) => (
+          <div key={item.name} className="col-span-1">
             <CategoryBox
               onClick={(category) => setCustomValue("categoryId", category)}
-              selected={category === item.label}
-              label={item.label}
+              selected={category === item.id}
+              id={item.id}
+              label={item.name}
             />
           </div>
         ))}
@@ -165,19 +191,16 @@ const PostModal = () => {
           title="Where is your place located?"
           subtitle="Help guests find you!"
         />
-        <Input
-          id="address"
-          label="Address"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-        />
-        {/* <CountrySelect
-          value={location}
-          onChange={(value) => setCustomValue("location", value)}
-        /> */}
-        {/* <Map center={location?.latlng} /> */}
+        {locations.map((item: any) => (
+          <div key={item.location.id} className="col-span-1">
+            <CategoryBox
+              onClick={(location) => setCustomValue("locationId", location)}
+              selected={location === item.location.id}
+              id={item.location.id}
+              label={item.location.name + item.location.address}
+            />
+          </div>
+        ))}
       </div>
     );
   }
@@ -209,9 +232,16 @@ const PostModal = () => {
           title="Add a photo of your place"
           subtitle="Show guests what your place looks like!"
         />
-        <ImageUpload
-          onChange={(value) => setCustomValue("images", value)}
-          value={images}
+        <Input
+          id="images"
+          label="Image"
+          type="file"
+          accept="image/*"
+          // onChange={handleImageChange}
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
         />
       </div>
     );

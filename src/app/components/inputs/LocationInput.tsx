@@ -6,22 +6,22 @@ interface CategoryBoxProps {
   icon?: IconType;
   label: string;
   selected?: boolean;
-  onClick: (value: string) => void;
-  onClick2?: (value: string) => void;
+  onClick: () => void;
+  address: string;
   id: string;
 }
 
-const CategoryBox: React.FC<CategoryBoxProps> = ({
+const LocationBox: React.FC<CategoryBoxProps> = ({
   id,
   icon: Icon,
   label,
   selected,
   onClick,
-  onClick2,
+  address,
 }) => {
   return (
     <div
-      onClick={() => onClick(id) }
+      onClick={() => onClick(id, address)}
       className={`
         rounded-xl
         border-2
@@ -40,4 +40,4 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
   );
 };
 
-export default CategoryBox;
+export default LocationBox;
