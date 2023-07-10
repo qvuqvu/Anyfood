@@ -65,7 +65,7 @@ const UserClient: React.FC<ListingClientProps> = ({
     }
   };
 
-  const handleImageChange = (value) => {
+  const handleImageChange = (value:any) => {
     // Xử lý khi hình ảnh thay đổi
     console.log('Image changed:', value);
     setvalue(value)
