@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import useLoginModal from "@/app/components/hooks/useLoginModal";
 import useRegisterModal from "@/app/components/hooks/useRegisterModal";
-
+import Command from "./command";
 import MenuItem from "./menuItem";
 import Avatar from "./Avatar";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -29,20 +29,23 @@ function UserMenu() {
   const addressToken = "0x3A54a26f812A163113C298090aa35Ef084aE5ad7";
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const contractToken = new ethers.Contract(addressToken, tokenAbi, provider);
-
+  /*   DECLARE MODALS */
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
   const postModal = usePostModal();
   const locationModal = useLocationModal();
   const withdrawModal = useWithdrawModal();
+  /*   DECLARE STATES */
   const [accounts, setAddress] = useState("");
   const [amountToken, setAmountToken] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
+
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
 
+  /*   CALLBACK FUNCTIONS FOR OPEN/CLOSE MODALS */
   const onLocation = useCallback(() => {
     if (!session?.user) {
       return loginModal.onOpen();
@@ -50,6 +53,7 @@ function UserMenu() {
 
     locationModal.onOpen();
   }, [loginModal, locationModal, session?.user]);
+
   const onPost = useCallback(() => {
     if (!session?.user) {
       return loginModal.onOpen();
@@ -106,6 +110,38 @@ function UserMenu() {
       console.log("MetaMask don't install.");
     }
   }, []);
+
+  /*   COMMANDS FOR USER MENU ITEMS */
+
+  const myProfileCommand = new Command();
+  myProfileCommand.execute = () => {
+    router.push(`/user/${session?.user.data.user.id}`);
+  };
+
+  const settingsCommand = new Command();
+  settingsCommand.execute = () => {
+    router.push("/favorites");
+  };
+
+  const signOutCommand = new Command();
+  signOutCommand.execute = () => {
+    signOut();
+  };
+
+  const withdrawModalCommand = new Command();
+  withdrawModalCommand.execute = () => {
+    withdrawModal.onOpen();
+  };
+
+  const loginModalCommand = new Command();
+  loginModalCommand.execute = () => {
+    loginModal.onOpen();
+  };
+
+  const registerModalCommand = new Command();
+  registerModalCommand.execute = () => {
+    registerModal.onOpen();
+  };
 
   return (
     <div className="relative">
@@ -219,24 +255,18 @@ function UserMenu() {
           <div className="flex flex-col cursor-pointer">
             {session?.user ? (
               <>
-                <MenuItem
-                  label="My profile"
-                  onClick={() => router.push("/trips")}
-                />
-                <MenuItem
-                  label="Settings"
-                  onClick={() => router.push("/favorites")}
-                />
+                <MenuItem label="My profile" command={myProfileCommand} />
+                <MenuItem label="Settings" command={settingsCommand} />
                 {/* <MenuItem label={formatAddress(accounts) || "Connect wallet"} onClick={() => connectWallet()} /> */}
                 {accounts && (
                   <MenuItem
                     label={"Withdraw token"}
-                    onClick={withdrawModal.onOpen}
+                    command={withdrawModalCommand}
                   />
                 )}
                 <hr />
-                <MenuItem label="Logout" onClick={() => signOut()} />
-                <div className="flex flex-col rounded-lg shadow-lg ">
+                <MenuItem label="Logout" command={signOutCommand} />
+                <div className="flex flex-col rounded-lg shadow-lg ml-4">
                   <div className="text-pumpkin">
                     <div className="font-pops font-bold ">Reward:</div>
                     <div>{session?.user.data.user.reward}</div>
@@ -249,8 +279,8 @@ function UserMenu() {
               </>
             ) : (
               <>
-                <MenuItem label="Log in" onClick={loginModal.onOpen} />
-                <MenuItem label="Sign up" onClick={registerModal.onOpen} />
+                <MenuItem label="Log in" command={loginModalCommand} />
+                <MenuItem label="Sign up" command={registerModalCommand} />
               </>
             )}
           </div>

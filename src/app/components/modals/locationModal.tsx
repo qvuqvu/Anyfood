@@ -13,10 +13,12 @@ import Heading from "../Heading";
 import Button from "../buttons/Button1";
 import useLocationModal from "../hooks/useLocationModal";
 import { useSession } from "next-auth/react";
+import { response } from "express";
 const LocationModal = () => {
   const locationModal = useLocationModal();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
+  const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
   const {
@@ -36,6 +38,14 @@ const LocationModal = () => {
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    // data.append("images", image);
+    // console.log(data.images);
+    // const imageFile = data.image?.[0];
+    // console.log(imageFile);
+    // if (!imageFile) {
+    //   toast.error("Missing fields");
+    //   return;
+    // }
     setIsLoading(true);
     axios
       .post("http://localhost:2002/api/v1/locations", data, {
@@ -53,6 +63,16 @@ const LocationModal = () => {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  const handleImageChange = (e) => {
+    // upload multiple images
+    const file = e.target.files[0];
+
+    // upload avatar
+    // const file = e.target.files[0];
+    setImage(file);
+    console.log(image);
   };
 
   const bodyContent = (
@@ -133,11 +153,13 @@ const LocationModal = () => {
         label="Image"
         type="file"
         accept="image/*"
+        onChange={handleImageChange}
         disabled={isLoading}
         register={register}
         errors={errors}
         required
       />
+      {/* <input type="file" multiple id="image" onChange={handleImageChange} /> */}
 
       {/* <Input
         id="phoneNumber"
@@ -165,7 +187,7 @@ const LocationModal = () => {
       disabled={isLoading}
       isOpen={locationModal.isOpen}
       title="Add a location"
-      actionLabel="Continue"
+      actionLabel="Create"
       onClose={locationModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
