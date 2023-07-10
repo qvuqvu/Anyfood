@@ -26,6 +26,7 @@ import EmptyState from "@/app/components/EmptyState";
 import useCategory from "@/app/components/hooks/useCategory";
 import Button from "@/app/components/buttons/Button1";
 import ListingLocation from "@/app/components/location/ListingLocation";
+import ImageUpload from "@/app/components/inputs/ImageUpload";
 interface ListingClientProps {
   listing: any;
   location: any;
@@ -42,6 +43,7 @@ const UserClient: React.FC<ListingClientProps> = ({
   const { data: session } = useSession();
   const [followed, setFollow] = useState(false);
   const [currentTab, setCurrentTab] = useState("posts");
+  const [value,setvalue]=useState(null);
   const onSubmit = () => {
     handleFollow(id);
   };
@@ -63,6 +65,12 @@ const UserClient: React.FC<ListingClientProps> = ({
     }
   };
 
+  const handleImageChange = (value) => {
+    // Xử lý khi hình ảnh thay đổi
+    console.log('Image changed:', value);
+    setvalue(value)
+  };
+
   return (
     <>
       <div
@@ -75,6 +83,10 @@ const UserClient: React.FC<ListingClientProps> = ({
         gap-4
         "
       >
+        <ImageUpload 
+        onChange={handleImageChange}
+        value={value} // Giá trị hình ảnh hiện tại (rỗng trong trường hợp này)
+        />
         <div className="flex flex-col gap-5  ">
           <div className="self-center  text-h1 font-bold border-secondary border-b-2 text-primary font-pops">
             {user?.data?.data?.firstName} {user?.data?.data?.lastName}
@@ -119,12 +131,12 @@ const UserClient: React.FC<ListingClientProps> = ({
             Posts
           </div>
           <div
-            onClick={() => setCurrentTab("address")}
+            onClick={() => setCurrentTab("location")}
             className={`text-h5 font-bold ${
-              currentTab === "address" ? "border-secondary" : ""
+              currentTab === "location" ? "border-secondary" : ""
             } border-b-2 text-primary font-pops cursor-pointer`}
           >
-            Address
+            Locations
           </div>
         </div>
         {currentTab === "posts" ? (
@@ -146,7 +158,7 @@ const UserClient: React.FC<ListingClientProps> = ({
                    gap-8
                  "
             >
-              {listing.data.map((post: any) => (
+              {listing?.data?.map((post: any) => (
                 <ListingCard
                   // currentUser={currentUser}
                   key={post.id}
@@ -156,7 +168,7 @@ const UserClient: React.FC<ListingClientProps> = ({
             </div>
           )
         ) : (
-          location.data.length === 0 ? (
+          location?.data?.length === 0 ? (
             <ClientOnly>
               <EmptyState showReset />
             </ClientOnly>
@@ -173,7 +185,7 @@ const UserClient: React.FC<ListingClientProps> = ({
                  gap-8
                "
           >
-            {location.data.map((location: any) => (
+            {location?.data?.map((location: any) => (
               <ListingLocation
                 // currentUser={currentUser}
                 key={location.id}
