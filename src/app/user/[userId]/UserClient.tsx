@@ -25,17 +25,23 @@ import ClientOnly from "@/app/components/ClientOnly";
 import EmptyState from "@/app/components/EmptyState";
 import useCategory from "@/app/components/hooks/useCategory";
 import Button from "@/app/components/buttons/Button1";
-import { response } from "express";
-import { Toast } from "react-toastify/dist/components";
+import ListingLocation from "@/app/components/location/ListingLocation";
 interface ListingClientProps {
   listing: any;
+  location: any;
   user: any;
   id: string;
 }
 
-const UserClient: React.FC<ListingClientProps> = ({ listing, user, id }) => {
+const UserClient: React.FC<ListingClientProps> = ({
+  listing,
+  location,
+  user,
+  id,
+}) => {
   const { data: session } = useSession();
   const [followed, setFollow] = useState(false);
+  const [currentTab, setCurrentTab] = useState("posts");
   const onSubmit = () => {
     handleFollow(id);
   };
@@ -71,7 +77,7 @@ const UserClient: React.FC<ListingClientProps> = ({ listing, user, id }) => {
       >
         <div className="flex flex-col gap-5  ">
           <div className="self-center  text-h1 font-bold border-secondary border-b-2 text-primary font-pops">
-            {user.data.data.firstName} {user.data.data.lastName}
+            {user?.data?.data?.firstName} {user?.data?.data?.lastName}
           </div>
           {followed ? (
             <Button
@@ -86,50 +92,96 @@ const UserClient: React.FC<ListingClientProps> = ({ listing, user, id }) => {
 
           <div className="self-center flex gap-4">
             <div className="flex flex-col items-center">
-              <div className="text-bold font-pops">{user.data.totalPost}</div>
+              <div className="text-bold font-pops">{user?.data?.totalPost}</div>
               <div className="text-normal text-gray-500"> Posts</div>
             </div>
             <div className="flex flex-col items-center">
               <div className="text-bold font-pops">
-                {user.data.data.followersCount}
+                {user?.data?.data?.followersCount}
               </div>
               <div className="text-normal text-gray-500"> Followers</div>
             </div>
             <div className="flex flex-col items-center">
               <div className="text-bold font-pops">
-                {user.data.data.followingCount}
+                {user?.data?.data?.followingCount}
               </div>
               <div className="text-normal text-gray-500"> Following</div>
             </div>
           </div>
         </div>
-
-        {listing.data.length === 0 ? (
-          <ClientOnly>
-            <EmptyState showReset />
-          </ClientOnly>
-        ) : (
+        <div className="flex flex-row gap-5">
           <div
-            className=" 
-               mt-9
-               grid 
-               grid-cols-1 
-               mopile:grid-cols-1 
-               tablet:grid-cols-2 
-               laptop:grid-cols-3
-               large:grid-cols-4
-               huge:grid-cols-5
-               gap-8
-             "
+            onClick={() => setCurrentTab("posts")}
+            className={`text-h5 font-bold ${
+              currentTab === "posts" ? "border-secondary" : ""
+            } border-b-2 text-primary font-pops cursor-pointer`}
           >
-            {listing.data.map((post: any) => (
-              <ListingCard
+            Posts
+          </div>
+          <div
+            onClick={() => setCurrentTab("address")}
+            className={`text-h5 font-bold ${
+              currentTab === "address" ? "border-secondary" : ""
+            } border-b-2 text-primary font-pops cursor-pointer`}
+          >
+            Address
+          </div>
+        </div>
+        {currentTab === "posts" ? (
+          listing.data.length === 0 ? (
+            <ClientOnly>
+              <EmptyState showReset />
+            </ClientOnly>
+          ) : (
+            <div
+              className=" 
+                   mt-9
+                   grid 
+                   grid-cols-1 
+                   mopile:grid-cols-1 
+                   tablet:grid-cols-2 
+                   laptop:grid-cols-3
+                   large:grid-cols-4
+                   huge:grid-cols-5
+                   gap-8
+                 "
+            >
+              {listing.data.map((post: any) => (
+                <ListingCard
+                  // currentUser={currentUser}
+                  key={post.id}
+                  data={post}
+                />
+              ))}
+            </div>
+          )
+        ) : (
+          location.data.length === 0 ? (
+            <ClientOnly>
+              <EmptyState showReset />
+            </ClientOnly>
+          ) : (<div
+            className=" 
+                 mt-9
+                 grid 
+                 grid-cols-1 
+                 mopile:grid-cols-1 
+                 tablet:grid-cols-2 
+                 laptop:grid-cols-3
+                 large:grid-cols-4
+                 huge:grid-cols-5
+                 gap-8
+               "
+          >
+            {location.data.map((location: any) => (
+              <ListingLocation
                 // currentUser={currentUser}
-                key={post.id}
-                data={post}
+                key={location.id}
+                data={location}
               />
             ))}
           </div>
+        )
         )}
         {/* SIDEBAR */}
         {/* <div className="flex flex-col">

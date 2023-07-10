@@ -1,6 +1,6 @@
 import React from "react";
 import Avatar from "./nav/Avatar";
-
+import { useRouter } from "next/navigation";
 interface UserStatusProps {
   lastName: string;
   firstName: string;
@@ -8,6 +8,7 @@ interface UserStatusProps {
   totalPosts?: number;
   totalFollowers?: number;
   totalFollowing?: number;
+  userId: string;
 }
 
 const UserStatus: React.FC<UserStatusProps> = ({
@@ -17,10 +18,15 @@ const UserStatus: React.FC<UserStatusProps> = ({
   totalPosts,
   totalFollowers,
   totalFollowing,
+  userId,
 }) => {
+  const router = useRouter();
+  const handleAction = () => {
+    router.push(`/user/${userId}`);
+  };
   return (
     <div className="flex flex-col gap-3 shadow-lg border-gray-200 border-[1px] px-6 py-8 rounded-xl">
-      <div className="flex gap-4">
+      <div onClick={handleAction} className="flex gap-4 cursor-pointer">
         <Avatar />
         <div className="text-bold font-pops text-primary h1">
           {lastName} {firstName}{" "}

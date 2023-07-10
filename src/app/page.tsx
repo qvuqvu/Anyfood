@@ -17,6 +17,7 @@ import ListingCard from "./components/posts/ListingCard";
 import axios from "axios";
 import UserStatus from "./components/UserStatus";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import EmptyUserStatus from "./components/EmptyUserStatus";
 import CategoryCard from "./components/categories/CategoryCard";
 export default function Home() {
@@ -45,7 +46,11 @@ export default function Home() {
         console.log(error);
       });
   }, []);
-
+  const router = useRouter();
+  const locationId = "1";
+  const handleTest = () => {
+    router.push(`/location/${locationId}`);
+  };
   return (
     <ClientOnly>
       <Container>
@@ -66,7 +71,9 @@ export default function Home() {
 
             {/* GREETING */}
             {!session ? null : (
-              <div className="font-pops text-[25px] mt-5 text-primary">
+              <div onClick={()=>{
+                handleTest()
+              }} className="font-pops text-[25px] mt-5 text-primary">
                 Hi there, <strong>{session.user.data.user.firstName}!</strong>
               </div>
             )}
@@ -109,6 +116,7 @@ export default function Home() {
                 totalPosts={session.user.data.totalPost}
                 totalFollowers={session.user.data.user.followersCount}
                 totalFollowing={session.user.data.user.followingCount}
+                userId={session.user.data.user.id}
               />
             )}
 
